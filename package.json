@@ -1,0 +1,33 @@
+{
+  "name": "coptic-calendar",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' 'test/**/*.ts' --fix",
+    "format": "prettier --write 'src/**/*.ts' 'test/**/*.ts'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.2",
+    "@typescript-eslint/parser": "^8.58.2",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "jest": "^30.3.0",
+    "prettier": "^3.8.3",
+    "ts-jest": "^29.4.9",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.2"
+  }
+}
