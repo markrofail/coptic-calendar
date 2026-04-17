@@ -1,7 +1,8 @@
 import { CopticDate } from '../../core/CopticDate.js';
 import { RuleEngine } from '../../core/RuleEngine.js';
-import { SYNAXARIUM_RULES } from './rules.js';
-import type { SynaxariumContext } from './rules.js';
+import { SYNAXARIUM_RULES, type SynaxariumContext } from './rules.js';
+import { type Locale } from '../../core/i18n.js';
+import { translateSynaxarium } from './i18n.js';
 
 const engine = new RuleEngine<SynaxariumContext, string[]>(SYNAXARIUM_RULES);
 
@@ -18,7 +19,7 @@ declare module '../../core/CopticDate.js' {
         /**
          * Resolves the canonical Church readings corresponding exactly sequentially to this native date.
          */
-        synaxarium(): string[];
+        synaxarium(opts?: { locale?: Locale }): string[];
     }
 }
 
@@ -27,7 +28,13 @@ declare module '../../core/CopticDate.js' {
  */
 export function synaxariumPlugin(CopticDateClass: typeof CopticDate): void {
     if (!CopticDateClass.prototype.synaxarium) {
-        CopticDateClass.prototype.synaxarium = function (this: CopticDate): string[] {
+        CopticDateClass.prototype.synaxarium = function (
+            this: CopticDate,
+            opts?: { locale?: Locale },
+        ): string[] {
+            if (opts?.locale) {
+                return translateSynaxarium(this.month, this.day, opts.locale);
+            }
             return getSynaxariumNames(this.month, this.day);
         };
     }

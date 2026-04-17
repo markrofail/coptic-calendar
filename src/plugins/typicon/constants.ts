@@ -13,6 +13,12 @@ export const TUNE_NAMES = [
 
 export type Tune = (typeof TUNE_NAMES)[number];
 
+export interface LiturgicalRite {
+    season: string;
+    tune: string;
+    hasMetanoias: boolean;
+}
+
 export const LORD_FEASTS: CopticOccasion[] = [
     'Nativity',
     'Theophany',

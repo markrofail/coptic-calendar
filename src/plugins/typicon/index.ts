@@ -2,15 +2,11 @@ import { CopticDate } from '../../core/CopticDate.js';
 import { getOccasions } from '../occasions/index.js';
 import { getEasterForCopticYear, copticToJDN } from '../../core/computus.js';
 import { RuleEngine } from '../../core/RuleEngine.js';
-import { LORD_FEASTS, type Tune } from './constants.js';
+import { LORD_FEASTS, type LiturgicalRite } from './constants.js';
+import { type Locale } from '../../core/i18n.js';
+import { translateSeason, translateTune } from './i18n.js';
 
 import { TYPICON_RULES, type TypiconContext } from './rules.js';
-
-export interface LiturgicalRite {
-    season: string;
-    tune: Tune;
-    hasMetanoias: boolean;
-}
 
 const engine = new RuleEngine<TypiconContext, LiturgicalRite>(TYPICON_RULES);
 
@@ -44,7 +40,7 @@ declare module '../../core/CopticDate.js' {
         /**
          * Derives the active canonical Typicon configuration constraints automatically.
          */
-        rite(): LiturgicalRite;
+        rite(opts?: { locale?: Locale }): LiturgicalRite;
     }
 }
 
@@ -53,8 +49,19 @@ declare module '../../core/CopticDate.js' {
  */
 export function typiconPlugin(CopticDateClass: typeof CopticDate): void {
     if (!CopticDateClass.prototype.rite) {
-        CopticDateClass.prototype.rite = function (this: CopticDate): LiturgicalRite {
-            return getLiturgicalRite(this);
+        CopticDateClass.prototype.rite = function (
+            this: CopticDate,
+            opts?: { locale?: Locale },
+        ): LiturgicalRite {
+            const rite = getLiturgicalRite(this);
+            if (opts?.locale) {
+                return {
+                    ...rite,
+                    season: translateSeason(rite.season, opts.locale),
+                    tune: translateTune(rite.tune, opts.locale),
+                };
+            }
+            return rite;
         };
     }
 }

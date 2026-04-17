@@ -1,4 +1,9 @@
-import { copticToJDN, jdnToCopticElements, getEasterForCopticYear, gregorianToJDN } from '../computus.js';
+import {
+    copticToJDN,
+    jdnToCopticElements,
+    getEasterForCopticYear,
+    gregorianToJDN,
+} from '../computus.js';
 
 describe('Computus Unit', () => {
     it('should successfully roundtrip Coptic 1740-01-01 through JDN', () => {

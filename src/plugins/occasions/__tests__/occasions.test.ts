@@ -48,7 +48,8 @@ describe('Occasions Plugin', () => {
         [50, 'ApostlesFast'],
     ])('should contain %s for offset %i relative to Easter', (offset, occasion) => {
         const easter = CopticDate.from({ year: 1740, month: 8, day: 27 });
-        const target = offset < 0 ? easter.subtract({ days: Math.abs(offset) }) : easter.add({ days: offset });
+        const target =
+            offset < 0 ? easter.subtract({ days: Math.abs(offset) }) : easter.add({ days: offset });
         expect(target.occasions()).toContain(occasion);
     });
 
@@ -63,5 +64,18 @@ describe('Occasions Plugin', () => {
     ])('should resolve %s', (year, month, day, title) => {
         const d = CopticDate.from({ year, month, day });
         expect(d.occasions()).toContain('Paramoun');
+    });
+
+    // 4. Internationalization
+    it('should return raw tokens when no locale is provided', () => {
+        const d = CopticDate.from({ year: 1740, month: 1, day: 1 }); // Nayrouz
+        expect(d.occasions()).toContain('Nayrouz');
+    });
+
+    it('should return localized names when locale is provided', () => {
+        const d = CopticDate.from({ year: 1740, month: 1, day: 1 });
+        expect(d.occasions({ locale: 'ar' })).toContain('عيد النيروز');
+        expect(d.occasions({ locale: 'en' })).toContain('Nayrouz');
+        expect(d.occasions({ locale: 'cop' })).toContain('Ⲛⲓⲣⲟⲩⲱ');
     });
 });

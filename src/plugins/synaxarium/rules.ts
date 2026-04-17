@@ -1,5 +1,5 @@
 import type { Rule } from '../../core/RuleEngine.js';
-import { SYNAXARIUM_NAMES } from './constants.js';
+import SYNAXARIUM_NAMES_EN from './locales/en.json' with { type: 'json' };
 
 export interface SynaxariumContext {
     /** Coptic month (1-13) */
@@ -19,6 +19,6 @@ export const SYNAXARIUM_RULES: Rule<SynaxariumContext, string[]>[] = [
         // source: St-Takla
         // see: https://st-takla.org/Saints/Coptic-Orthodox-Saints-Biography/ (The Coptic Orthodox Daily Commemorative Registry)
         condition: () => true,
-        apply: (ctx) => SYNAXARIUM_NAMES[`${ctx.month}-${ctx.day}`] || [],
+        apply: (ctx) => (SYNAXARIUM_NAMES_EN as Record<string, string[]>)[`${ctx.month}-${ctx.day}`] || [],
     },
 ];

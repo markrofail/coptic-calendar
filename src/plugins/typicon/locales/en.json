@@ -1,0 +1,26 @@
+{
+    "seasons": {
+        "Annual": "Annual",
+        "Kiahk": "Kiahk",
+        "GreatLent": "Great Lent",
+        "JonahsFast": "Jonah's Fast",
+        "HolyWeek": "Holy Week",
+        "PalmSunday": "Palm Sunday",
+        "Pentecost": "Holy 50 Days (Pentecost)",
+        "StMarysFast": "St. Mary's Fast",
+        "Nayrouz": "Nayrouz",
+        "FeastOfTheCross": "Feast of the Cross",
+        "Nativity": "Nativity",
+        "CommemorationOfLord": "Commemoration of the Lord (29th)",
+        "Paramoun": "Paramoun"
+    },
+    "tunes": {
+        "Annual": "Annual",
+        "Kiahk": "Kiahk",
+        "Lenten": "Lenten",
+        "Joyful": "Joyful",
+        "PalmSunday": "Palm Sunday",
+        "HolyWeek": "Holy Week",
+        "Fasting": "Fasting (Weekday)"
+    }
+}

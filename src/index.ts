@@ -1,1 +1,1 @@
-export { CopticDate, type DurationLike } from './core/CopticDate.js';
+export { CopticDate } from './core/CopticDate.js';

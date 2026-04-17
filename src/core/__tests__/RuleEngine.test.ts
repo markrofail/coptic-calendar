@@ -3,7 +3,12 @@ import { RuleEngine } from '../RuleEngine.js';
 describe('RuleEngine', () => {
     const rules = [
         { name: 'LowPriority', priority: 100, condition: () => true, apply: () => 'low' },
-        { name: 'HighPriority', priority: 10, condition: (ctx: any) => ctx.match, apply: () => 'high' },
+        {
+            name: 'HighPriority',
+            priority: 10,
+            condition: (ctx: any) => ctx.match,
+            apply: () => 'high',
+        },
     ];
     const engine = new RuleEngine<any, string>(rules);
 

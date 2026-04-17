@@ -2,6 +2,8 @@ import { CopticDate } from '../../core/CopticDate.js';
 import { getEasterForCopticYear, copticToJDN } from '../../core/computus.js';
 import { OCCASION_GENERATORS } from './rules.js';
 import { FIXED_OCCASIONS, EASTER_OFFSETS, type CopticOccasion } from './constants.js';
+import { type Locale } from '../../core/i18n.js';
+import { translateOccasion } from './i18n.js';
 
 /**
  * Resolves all liturgical occasions occurring on a specific Coptic date.
@@ -54,8 +56,9 @@ declare module '../../core/CopticDate.js' {
     interface CopticDate {
         /**
          * Returns an array of liturgical occasions (feasts, fasts, etc.) for this date.
+         * If locale is provided, returns localized names.
          */
-        occasions(): CopticOccasion[];
+        occasions(opts?: { locale?: Locale }): string[];
     }
 }
 
@@ -64,8 +67,15 @@ declare module '../../core/CopticDate.js' {
  */
 export function occasionsPlugin(CopticDateClass: typeof CopticDate): void {
     if (!CopticDateClass.prototype.occasions) {
-        CopticDateClass.prototype.occasions = function (this: CopticDate): CopticOccasion[] {
-            return getOccasions(this);
+        CopticDateClass.prototype.occasions = function (
+            this: CopticDate,
+            opts?: { locale?: Locale },
+        ): string[] {
+            const raw = getOccasions(this);
+            if (opts?.locale) {
+                return raw.map((occ) => translateOccasion(occ, opts.locale!));
+            }
+            return raw;
         };
     }
 }

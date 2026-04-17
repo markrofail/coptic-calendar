@@ -1,14 +1,15 @@
-export interface DurationLike {
+
+
+import { copticToJDN, jdnToCopticElements } from './computus.js';
+import { COPTIC_MONTHS, CALENDAR_UNITS } from './constants.js';
+import { translateMonth, type Locale } from './i18n.js';
+
+interface DurationLike {
     years?: number;
     months?: number;
     weeks?: number;
     days?: number;
 }
-
-export type CopticDatePlugin = (copticClass: typeof CopticDate) => void;
-
-import { copticToJDN, jdnToCopticElements } from './computus.js';
-import { COPTIC_MONTHS, CALENDAR_UNITS } from './constants.js';
 
 export class CopticDate {
     public readonly year: number;
@@ -38,9 +39,8 @@ export class CopticDate {
 
     readonly monthsInYear = COPTIC_MONTHS.NASIE;
 
-    static extend(plugin: CopticDatePlugin): typeof CopticDate {
+    static extend(plugin: (copticClass: typeof CopticDate) => void) {
         plugin(CopticDate);
-        return CopticDate;
     }
 
     static from(item: unknown): CopticDate {
@@ -126,5 +126,11 @@ export class CopticDate {
     toString(): string {
         const pad = (n: number, w: number): string => n.toString().padStart(w, '0');
         return `${pad(this.year, 4)}-${pad(this.month, 2)}-${pad(this.day, 2)}[u-ca=coptic]`;
+    }
+
+    toLocaleString(opts?: { locale?: Locale }): string {
+        const locale = opts?.locale || 'en';
+        const monthName = translateMonth(this.month, locale);
+        return `${this.day} ${monthName} ${this.year}`;
     }
 }

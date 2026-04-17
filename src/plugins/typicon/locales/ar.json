@@ -1,0 +1,26 @@
+{
+    "seasons": {
+        "Annual": "السنوي",
+        "Kiahk": "كيهك",
+        "GreatLent": "الصوم الكبير",
+        "JonahsFast": "صوم يونان",
+        "HolyWeek": "أسبوع الآلام",
+        "PalmSunday": "أحد الشعانين",
+        "Pentecost": "الخمسين المقدسة",
+        "StMarysFast": "صوم السيدة العذراء",
+        "Nayrouz": "النيروز",
+        "FeastOfTheCross": "عيد الصليب",
+        "Nativity": "الميلاد",
+        "CommemorationOfLord": "تذكار البشارة والميلاد والقيامة (٢٩)",
+        "Paramoun": "برامون"
+    },
+    "tunes": {
+        "Annual": "سنوي",
+        "Kiahk": "كيهكي",
+        "Lenten": "صيامي (ألحان الصوم الكبير)",
+        "Joyful": "فرايحي",
+        "PalmSunday": "شعنيني",
+        "HolyWeek": "حزاييني",
+        "Fasting": "صومي (ألحان الصوم)"
+    }
+}
