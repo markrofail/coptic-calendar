@@ -13,4 +13,21 @@ export default {
       },
     ],
   },
+  collectCoverage: true,
+  coverageThreshold: {
+    global: {
+      branches: 88,
+      functions: 100,
+      lines: 98,
+      statements: 98,
+    },
+  },
+  coverageProvider: 'v8',
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.test.ts',
+    '!src/**/__tests__/**',
+    '!src/index.ts',
+  ],
+  coverageReporters: ['text', 'lcov'],
 };

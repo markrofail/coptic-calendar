@@ -42,6 +42,7 @@ export const OCCASION_GENERATORS: OccasionGenerator[] = [
         if (diff >= EASTER_OFFSETS.LENT && diff < 0) res.push('Lent');
         if (diff >= EASTER_OFFSETS.JONAHS_FAST_START && diff <= EASTER_OFFSETS.JONAHS_FAST_END)
             res.push('JonahsFast');
+        if (diff === EASTER_OFFSETS.JONAHS_PASSOVER) res.push('JonahsPassover');
         if (diff === EASTER_OFFSETS.PALM_SUNDAY) res.push('PalmSunday');
         if (diff === EASTER_OFFSETS.COVENANT_THURSDAY) res.push('CovenantThursday');
         if (diff === EASTER_OFFSETS.THOMAS_SUNDAY) res.push('ThomasSunday');

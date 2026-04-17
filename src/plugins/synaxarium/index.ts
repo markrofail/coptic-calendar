@@ -32,10 +32,11 @@ export function synaxariumPlugin(CopticDateClass: typeof CopticDate): void {
             this: CopticDate,
             opts?: { locale?: Locale },
         ): string[] {
-            if (opts?.locale) {
+            const commemorations = getCommemorations(this.month, this.day);
+            if (opts && opts.locale) {
                 return translateSynaxarium(this.month, this.day, opts.locale);
             }
-            return getCommemorations(this.month, this.day);
+            return commemorations;
         };
     }
 }

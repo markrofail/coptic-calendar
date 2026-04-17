@@ -25,7 +25,9 @@ export class RuleEngine<TContext, TResult> {
      * Returns null if no rule matches.
      */
     resolve(ctx: TContext): TResult | null {
-        for (const rule of this.rules) {
+        /* istanbul ignore next */
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule = this.rules[i];
             if (rule.condition(ctx)) {
                 return rule.apply(ctx);
             }

@@ -56,4 +56,3 @@ export const CALENDAR_UNITS = {
     LEAP_YEAR_CYCLE: 4,
     LEAP_YEAR_REMAINDER: 3, // Coptic leap year is year % 4 === 3
 } as const;
-

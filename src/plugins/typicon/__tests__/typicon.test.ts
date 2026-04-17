@@ -191,4 +191,30 @@ describe('Typicon Plugin', () => {
         expect(rite.season).toBe('كيهك');
         expect(rite.tune).toBe('كيهكي');
     });
+
+    it('should handle .rite() call with no options', () => {
+        const date = CopticDate.from({ year: 1740, month: 1, day: 1 });
+        expect(date.rite()).toBeDefined();
+        expect(getLiturgicalRite(date)).toBeDefined();
+    });
+
+    it.each([
+        { date: { month: 1, day: 1 }, expectedSeason: 'Nayrouz' },
+        { date: { month: 1, day: 17 }, expectedSeason: 'FeastOfTheCross' },
+        { date: { month: 4, day: 28 }, expectedSeason: 'Paramoun' },
+        { date: { month: 4, day: 29 }, expectedSeason: 'Nativity' },
+        { date: { month: 5, day: 11 }, expectedSeason: 'Theophany' },
+        { date: { month: 10, day: 29 }, expectedSeason: 'CommemorationOfLord' }, // Paoni 29
+        { offset: 49, expectedSeason: 'Pentecost' },
+        { offset: -66, expectedSeason: 'JonahsPassover' },
+    ])('should resolve $expectedSeason on date $date or offset $offset', ({ date, offset, expectedSeason }) => {
+        let d: CopticDate;
+        if (date) {
+            d = CopticDate.from({ year: 1740, ...date });
+        } else {
+            const easter = getEasterForCopticYear(1740);
+            d = CopticDate.fromJDN(easter.jdn + (offset as number));
+        }
+        expect(d.rite().season).toBe(expectedSeason);
+    });
 });

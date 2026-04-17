@@ -59,7 +59,7 @@ export function typiconPlugin(CopticDateClass: typeof CopticDate): void {
             opts?: { locale?: Locale },
         ): LiturgicalRite {
             const rite = getLiturgicalRite(this);
-            if (opts?.locale) {
+            if (opts && opts.locale) {
                 return {
                     ...rite,
                     season: translateSeason(rite.season, opts.locale),

@@ -81,7 +81,7 @@ export function occasionsPlugin(CopticDateClass: typeof CopticDate): void {
             opts?: { locale?: Locale },
         ): string[] {
             const raw = getOccasions(this);
-            if (opts?.locale) {
+            if (opts && opts.locale) {
                 return raw.map((occ) => translateOccasion(occ, opts.locale!));
             }
             return raw;
@@ -89,16 +89,26 @@ export function occasionsPlugin(CopticDateClass: typeof CopticDate): void {
     }
 
     if (!CopticDateClass.prototype.when) {
-        CopticDateClass.prototype.when = function (this: CopticDate, occasion: CopticOccasion): CopticDate {
+        CopticDateClass.prototype.when = function (
+            this: CopticDate,
+            occasion: CopticOccasion,
+        ): CopticDate {
             return getOccasionForCopticYear(occasion, this.year);
         };
     }
 
     if (!CopticDateClass.prototype.next) {
-        CopticDateClass.prototype.next = function (this: CopticDate, occasion: CopticOccasion): CopticDate {
+        CopticDateClass.prototype.next = function (
+            this: CopticDate,
+            occasion: CopticOccasion,
+        ): CopticDate {
             const thisYearOccasion = getOccasionForCopticYear(occasion, this.year);
             const thisJdn = copticToJDN(this.year, this.month, this.day);
-            const occJdn = copticToJDN(thisYearOccasion.year, thisYearOccasion.month, thisYearOccasion.day);
+            const occJdn = copticToJDN(
+                thisYearOccasion.year,
+                thisYearOccasion.month,
+                thisYearOccasion.day,
+            );
 
             if (occJdn > thisJdn) {
                 return thisYearOccasion;

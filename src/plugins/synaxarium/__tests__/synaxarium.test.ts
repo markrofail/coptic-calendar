@@ -64,7 +64,12 @@ describe('Synaxarium Plugin', () => {
 
     it('should fallback to English for unsupported Synaxarium locales', () => {
         const date = CopticDate.from({ year: 1740, month: 1, day: 1 });
-        const entries = date.synaxarium({ locale: 'ar' });
+        const entries = date.synaxarium({ locale: 'ar' }); // ar is unsupported for whole synaxarium text
         expect(entries[0]).toContain('Feast of El-Nayrouz');
+    });
+
+    it('should handle .synaxarium() call with no options', () => {
+        const date = CopticDate.from({ year: 1740, month: 1, day: 1 });
+        expect(date.synaxarium()).toBeDefined();
     });
 });

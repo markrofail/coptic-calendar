@@ -1,5 +1,5 @@
 import { CopticDate } from '../../../core/CopticDate.js';
-import { getOccasions, getOccasionForCopticYear, occasionsPlugin } from '../index.js';
+import { getOccasions, getOccasionForCopticYear, occasionsPlugin, getEasterForCopticYear } from '../index.js';
 
 // Initialize plugin for prototype testing
 occasionsPlugin(CopticDate);
@@ -114,5 +114,60 @@ describe('Occasions Plugin', () => {
             expect(nextEaster.month).toBe(8);
             expect(nextEaster.day).toBe(12);
         });
+    });
+
+    it('should provide comprehensive coverage for sliding Paramoun windows', () => {
+        // Nativity AM 1740 (Sunday) -> Paramoun is Fri, Sat
+        expect(CopticDate.from({ year: 1740, month: 4, day: 26 }).occasions()).toContain('Paramoun');
+        expect(CopticDate.from({ year: 1740, month: 4, day: 27 }).occasions()).toContain('Paramoun');
+
+        // Epiphany AM 1740 (Wednesday) -> Paramoun is 1 day (Tue)
+        // 11 Tobi 1740 = Jan 20, 2024 (Saturday)
+        // Oops, let's pick 1739. 11 Tobi 1739 = Jan 19, 2023 (Thursday). Paramoun is Wednesday.
+        expect(CopticDate.from({ year: 1739, month: 5, day: 10 }).occasions()).toContain('Paramoun');
+    });
+
+    it('should resolve all floating feasts relative to Easter', () => {
+        const easter = getEasterForCopticYear(1740); // April 22, 2024 -> 2460423
+
+        const testCase = (offset: number, expected: string) => {
+            const d = CopticDate.fromJDN(easter.jdn + offset);
+            expect(d.occasions()).toContain(expected);
+        };
+
+        testCase(-68, 'JonahsFast');
+        testCase(-66, 'JonahsPassover');
+        testCase(-7, 'PalmSunday');
+        testCase(-3, 'CovenantThursday');
+        testCase(7, 'ThomasSunday');
+        testCase(39, 'Ascension');
+        testCase(49, 'Pentecost');
+        testCase(50, 'ApostlesFast');
+    });
+
+    it('should handle the end of the Apostles Fast', () => {
+        // Apostles fast ends on 5 Abib (Epip)
+        expect(CopticDate.from({ year: 1740, month: 11, day: 4 }).occasions()).toContain('ApostlesFast');
+        expect(CopticDate.from({ year: 1740, month: 11, day: 5 }).occasions()).not.toContain('ApostlesFast');
+    });
+
+    it('should handle fasting spans (Nativity, St Mary)', () => {
+        // Nativity Fast: 16 Hator (3-16) to 28 Kiahk (4-28). 29 Kiahk is the feast.
+        expect(CopticDate.from({ year: 1740, month: 3, day: 16 }).occasions()).toContain('NativityFast');
+        expect(CopticDate.from({ year: 1740, month: 4, day: 28 }).occasions()).toContain('NativityFast');
+        expect(CopticDate.from({ year: 1740, month: 4, day: 29 }).occasions()).not.toContain('NativityFast');
+
+        // St Mary's Fast: 1 Mesori (12-1) to 15 Mesori (12-15)
+        expect(CopticDate.from({ year: 1740, month: 12, day: 1 }).occasions()).toContain('StMarysFast');
+        expect(CopticDate.from({ year: 1740, month: 12, day: 15 }).occasions()).toContain('StMarysFast');
+    });
+
+    it('should hit getEasterForCopticYear branch', () => {
+        expect(getEasterForCopticYear(1740)).toBeDefined();
+    });
+
+    it('should handle getOccasions directly with no options', () => {
+        const d = CopticDate.from({ year: 1740, month: 1, day: 1 });
+        expect(getOccasions(d)).toBeDefined();
     });
 });

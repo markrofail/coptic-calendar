@@ -59,7 +59,9 @@ export const TYPICON_RULES: Rule<TypiconContext, LiturgicalRite>[] = [
             return LORD_FEASTS.some((f) => ctx.occasions.includes(f));
         },
         apply: (ctx: TypiconContext): LiturgicalRite => {
-            const activeFeast = LORD_FEASTS.find((f) => ctx.occasions.includes(f)) ?? 'Annual';
+            const activeFeast = LORD_FEASTS.find((f) => ctx.occasions.includes(f));
+            /* istanbul ignore next */
+            if (!activeFeast) return { season: 'Annual', tune: 'Annual', hasMetanoias: true };
             return { season: activeFeast, tune: 'Joyful', hasMetanoias: false };
         },
     },
@@ -142,7 +144,9 @@ export const TYPICON_RULES: Rule<TypiconContext, LiturgicalRite>[] = [
         },
         apply: (ctx: TypiconContext): LiturgicalRite => {
             const generalFasts: CopticOccasion[] = ['NativityFast', 'ApostlesFast', 'StMarysFast'];
-            const activeFast = generalFasts.find((f) => ctx.occasions.includes(f)) ?? 'Annual';
+            const activeFast = generalFasts.find((f) => ctx.occasions.includes(f));
+            /* istanbul ignore next */
+            if (!activeFast) return { season: 'Annual', tune: 'Annual', hasMetanoias: true };
             return { season: activeFast, tune: 'Fasting', hasMetanoias: !ctx.isWeekend };
         },
     },

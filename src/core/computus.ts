@@ -60,4 +60,3 @@ export function jsDateToCopticDate(date: Date): CopticDate {
     const elements = jdnToCopticElements(jdn);
     return CopticDate.from(elements);
 }
-

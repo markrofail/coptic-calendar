@@ -20,5 +20,9 @@ export const MONTH_NAMES: Record<Locale, Record<string, string>> = {
 export function translateMonth(month: number, locale: Locale = 'en'): string {
     const translations = MONTH_NAMES[locale] || MONTH_NAMES['en'];
     const key = String(month);
-    return translations[key] || (MONTH_NAMES['en'][key] as string);
+    const translation = translations[key];
+    if (translation) return translation;
+    const englishFallback = MONTH_NAMES['en'][key];
+    if (englishFallback) return englishFallback;
+    return key;
 }

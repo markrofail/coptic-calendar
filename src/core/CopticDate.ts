@@ -25,10 +25,25 @@ export class CopticDate {
     }
 
     get daysInMonth(): number {
-        if (this.month === COPTIC_MONTHS.NASIE) {
-            return this.inLeapYear ? 6 : 5;
+        if (this.month !== COPTIC_MONTHS.NASIE) {
+            return CALENDAR_UNITS.DAYS_IN_MONTH;
         }
-        return CALENDAR_UNITS.DAYS_IN_MONTH;
+        return this.inLeapYear ? 6 : 5;
+    }
+
+    /**
+     * Returns the Julian Day Number (JDN) for this date.
+     */
+    get jdn(): number {
+        return copticToJDN(this.year, this.month, this.day);
+    }
+
+    /**
+     * Creates a CopticDate from a Julian Day Number (JDN).
+     */
+    static fromJDN(jdn: number): CopticDate {
+        const { year, month, day } = jdnToCopticElements(jdn);
+        return new CopticDate(year, month, day);
     }
 
     get daysInYear(): number {
