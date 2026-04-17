@@ -17,9 +17,10 @@
   "scripts": {
     "build": "tsc",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
-    "lint:fix": "eslint 'src/**/*.ts' 'test/**/*.ts' --fix",
-    "format": "prettier --write 'src/**/*.ts' 'test/**/*.ts'"
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix",
+    "format": "prettier --write 'src/**/*.ts'",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +34,7 @@
     "@typescript-eslint/parser": "^8.58.2",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "jest": "^30.3.0",
     "prettier": "^3.8.3",
     "ts-jest": "^29.4.9",
