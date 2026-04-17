@@ -9,6 +9,7 @@ A lightning-fast, zero-dependency TypeScript library for comprehensive Coptic ca
 - **365-Day English Synaxarium Canonical Match**: Integrated mappings containing the authentic comprehensive ecclesiastical names for the Saints commemorated daily, evaluated canonically from the church's core payloads securely.
 - **Robust formatting & OOP methods**: Fluent immutable APIs to perform arithmetic gracefully (`.addDays()`) and formatting string tokens seamlessly natively (`.format("YYYY MMMM DD")`).
 - **Fully ESM and Type-Safe**: Ships with explicit TS definitions natively optimized.
+- **Canonical & Historical Purity**: Extensively cited and attributed to the Council of Nicaea (325 AD) and modern Diocesan authorities (SUS Copts, LACopts).
 
 ## Installation
 
@@ -100,6 +101,18 @@ const rite = getLiturgicalRite(lentWeekday);
 console.log(rite);
 // { season: 'GreatLent', tune: 'Lenten', hasMetanoias: true }
 ```
+
+## Canonical Foundations
+
+This library's credibility is built on authoritative ecclesiastical and historical sources:
+
+| Authority | Area of Influence |
+| :--- | :--- |
+| **Council of Nicaea (325 AD)** | The Alexandrian Computus algorithm used for Easter calculations. |
+| **SUS Copts Diocese** | Definitions of Lordly Feasts and Fasting durations. |
+| **LACopts Diocese** | Precise Typicon rules for the 29th commemoration of the Lord. |
+| **St-Takla.org** | Fixed feast dates and daily Synaxarium registry. |
+| **Pope Shenouda III** | Standardized fasting durations (Lent, Nativity, Apostles). |
 
 ## Running Tests
 

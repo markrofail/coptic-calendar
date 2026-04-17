@@ -1,9 +1,7 @@
-import { test } from '@jest/globals';
 import assert from 'node:assert';
-import { CopticDate } from '../src/CopticDate.js';
-import { getLiturgicalRite } from '../src/plugins/typicon.js';
-import { typiconPlugin } from '../src/plugins/typicon.js';
-import { getEasterForCopticYear } from '../src/computus.js';
+import { CopticDate } from '../../../core/CopticDate.js';
+import { getLiturgicalRite, typiconPlugin } from '../index.js';
+import { getEasterForCopticYear } from '../../../core/computus.js';
 test('getLiturgicalRite evaluates Pentecost accurately turning off metanoias entirely', () => {
     const easter = getEasterForCopticYear(1740);
     const rite = getLiturgicalRite(easter);

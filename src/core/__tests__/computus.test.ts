@@ -1,6 +1,5 @@
-import { test } from '@jest/globals';
 import assert from 'node:assert';
-import { getEasterForCopticYear, gregorianToJDN } from '../src/computus.js';
+import { getEasterForCopticYear, gregorianToJDN } from '../computus.js';
 
 test('getEasterForCopticYear resolves Alexandrian Equinox correctly', () => {
     const easter = getEasterForCopticYear(1740);

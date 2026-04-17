@@ -20,11 +20,13 @@ export const ALL_COPTIC_OCCASIONS = [
     'ThomasSunday',
     'Lent',
     'JonahsFast',
+    'JonahsPassover',
     'ApostlesFast',
     'StMarysFast',
     'NativityFast',
     'Nayrouz',
     'FeastOfTheCross',
+    'Paramoun',
 ] as const;
 
 /**

@@ -1,10 +1,9 @@
-export { CopticDate, type DurationLike } from './CopticDate.js';
-export { jsDateToCopticDate } from './computus.js';
-export { ALL_COPTIC_OCCASIONS, COPTIC_MONTH_NAMES } from './constants.js';
-export type { CopticOccasion } from './constants.js';
-export { getOccasionsOnCopticDate } from './plugins/occasions.js';
-export { getSynaxariumNames } from './plugins/synaxarium.js';
-export { synaxariumPlugin } from './plugins/synaxarium.js';
-export { occasionsPlugin } from './plugins/occasions.js';
-export { typiconPlugin } from './plugins/typicon.js';
-export { getLiturgicalRite, type Tune, type LiturgicalRite } from './plugins/typicon.js';
+export { CopticDate, type DurationLike } from './core/CopticDate.js';
+export { jsDateToCopticDate, getEasterForCopticYear } from './core/computus.js';
+export { ALL_COPTIC_OCCASIONS, COPTIC_MONTH_NAMES, COPTIC_MONTHS, type CopticOccasion } from './core/constants.js';
+export { RuleEngine, type Rule } from './core/RuleEngine.js';
+
+// Plugins (Vertical Slices)
+export * from './plugins/synaxarium/index.js';
+export * from './plugins/occasions/index.js';
+export * from './plugins/typicon/index.js';

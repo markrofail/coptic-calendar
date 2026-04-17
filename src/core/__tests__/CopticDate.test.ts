@@ -1,7 +1,6 @@
-import { test } from '@jest/globals';
 import assert from 'node:assert';
-import { CopticDate } from '../src/CopticDate.js';
-import { jsDateToCopticDate } from '../src/computus.js';
+import { CopticDate } from '../CopticDate.js';
+import { jsDateToCopticDate } from '../computus.js';
 
 test('converts 1 Thout 1740 (2023-09-12)', () => {
     const date = new Date(2023, 8, 12);
