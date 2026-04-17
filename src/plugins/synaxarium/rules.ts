@@ -17,6 +17,6 @@ export const SYNAXARIUM_RULES: Rule<SynaxariumContext, string[]>[] = [
         name: 'DailyCommemorationLookup',
         priority: 100,
         condition: () => true,
-        apply: (ctx) => SYNAXARIUM_NAMES[`${ctx.month}-${ctx.day}`] || []
-    }
+        apply: (ctx) => SYNAXARIUM_NAMES[`${ctx.month}-${ctx.day}`] || [],
+    },
 ];

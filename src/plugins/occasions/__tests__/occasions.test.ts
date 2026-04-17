@@ -1,8 +1,7 @@
-import assert from 'node:assert';
 import { getOccasionForCopticYear } from '../index.js';
 
 test('getOccasionForCopticYear routes properly', () => {
     const nayrouz = getOccasionForCopticYear('Nayrouz', 1740);
-    assert.strictEqual(nayrouz.month, 1);
-    assert.strictEqual(nayrouz.day, 1);
+    expect(nayrouz.month).toBe(1);
+    expect(nayrouz.day).toBe(1);
 });

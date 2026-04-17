@@ -1,8 +1,7 @@
 import { CopticDate } from '../../core/CopticDate.js';
 import { getEasterForCopticYear, copticToJDN } from '../../core/computus.js';
-import { type CopticOccasion, EASTER_OFFSETS } from '../../core/constants.js';
 import { OCCASION_GENERATORS } from './rules.js';
-import { FIXED_OCCASIONS } from './constants.js';
+import { FIXED_OCCASIONS, EASTER_OFFSETS, type CopticOccasion } from './constants.js';
 
 /**
  * Resolves all liturgical occasions occurring on a specific Coptic date.

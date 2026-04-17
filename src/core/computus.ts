@@ -3,7 +3,7 @@ import { EPOCH_JDN, CALENDAR_UNITS, COMPUTUS_CONSTANTS } from './constants.js';
 
 /**
  * Converts a Coptic date to a Julian Day Number (JDN).
- * 
+ *
  * Mathematical Context:
  * - This implementation uses the epoch JDN of 1825030 (Aug 29, 284 AD in the Julian Calendar).
  */
@@ -63,7 +63,7 @@ export function jsDateToCopticDate(date: Date): CopticDate {
 
 /**
  * Executes the Alexandrian Computus to resolve Easter mathematically against Julian/Gregorian offsets.
- * 
+ *
  * Historical Attribution:
  * - Computed using the Alexandrian Paschalion rules established at the First Council of Nicaea (325 AD).
  * - Follows the cycle of 19 years (Metonic cycle) as established by the Patriarchs of Alexandria.

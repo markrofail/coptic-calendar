@@ -1,15 +1,28 @@
-import { type CopticOccasion } from '../../core/constants.js';
+import { type CopticOccasion } from '../occasions/constants.js';
 
-export type Tune = 'Annual' | 'Kiahk' | 'Joyful' | 'Fasting' | 'Lenten' | 'PalmSunday' | 'HolyWeek' | 'Paramoun';
+export const TUNE_NAMES = [
+    'Annual',
+    'Kiahk',
+    'Joyful',
+    'Fasting',
+    'Lenten',
+    'PalmSunday',
+    'HolyWeek',
+    'Paramoun',
+] as const;
 
-export interface LiturgicalRite {
-    season: string;
-    tune: Tune;
-    hasMetanoias: boolean;
-}
+export type Tune = (typeof TUNE_NAMES)[number];
 
 export const LORD_FEASTS: CopticOccasion[] = [
-    'Nativity', 'Theophany', 'Annunciation', 'Ascension',
-    'Circumcision', 'WeddingAtCana', 'EntranceToTemple',
-    'FlightIntoEgypt', 'Transfiguration', 'CovenantThursday', 'ThomasSunday'
+    'Nativity',
+    'Theophany',
+    'Annunciation',
+    'Ascension',
+    'Circumcision',
+    'WeddingAtCana',
+    'EntranceToTemple',
+    'FlightIntoEgypt',
+    'Transfiguration',
+    'CovenantThursday',
+    'ThomasSunday',
 ];

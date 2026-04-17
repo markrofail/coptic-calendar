@@ -120,17 +120,11 @@ export class CopticDate {
     }
 
     equals(other: CopticDate): boolean {
-        return (
-            this.year === other.year &&
-            this.month === other.month &&
-            this.day === other.day
-        );
+        return this.year === other.year && this.month === other.month && this.day === other.day;
     }
 
     toString(): string {
         const pad = (n: number, w: number): string => n.toString().padStart(w, '0');
         return `${pad(this.year, 4)}-${pad(this.month, 2)}-${pad(this.day, 2)}[u-ca=coptic]`;
     }
-
-
 }
