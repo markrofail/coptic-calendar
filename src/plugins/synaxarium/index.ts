@@ -10,7 +10,7 @@ const engine = new RuleEngine<SynaxariumContext, string[]>(SYNAXARIUM_RULES);
  * Resolves the names of the Saints commemorated on a specific Coptic Month and Day.
  * Returns an empty array if no entry exists in the localized dictionary.
  */
-export function getSynaxariumNames(month: number, day: number): string[] {
+export function getCommemorations(month: number, day: number): string[] {
     return engine.resolve({ month, day }) || [];
 }
 
@@ -35,7 +35,7 @@ export function synaxariumPlugin(CopticDateClass: typeof CopticDate): void {
             if (opts?.locale) {
                 return translateSynaxarium(this.month, this.day, opts.locale);
             }
-            return getSynaxariumNames(this.month, this.day);
+            return getCommemorations(this.month, this.day);
         };
     }
 }

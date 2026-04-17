@@ -1,9 +1,12 @@
 import { CopticDate } from '../../core/CopticDate.js';
-import { getEasterForCopticYear, copticToJDN } from '../../core/computus.js';
+import { copticToJDN } from '../../core/computus.js';
+import { getEasterForCopticYear } from './computus.js';
 import { OCCASION_GENERATORS } from './rules.js';
 import { FIXED_OCCASIONS, EASTER_OFFSETS, type CopticOccasion } from './constants.js';
 import { type Locale } from '../../core/i18n.js';
 import { translateOccasion } from './i18n.js';
+
+export { getEasterForCopticYear };
 
 /**
  * Resolves all liturgical occasions occurring on a specific Coptic date.
@@ -30,7 +33,7 @@ export function getOccasionForCopticYear(occasion: CopticOccasion, year: number)
     for (const [key, occasions] of Object.entries(FIXED_OCCASIONS)) {
         if (occasions.includes(occasion)) {
             const [m, d] = key.split('-').map(Number);
-            return CopticDate.from({ year, month: m, day: d });
+            return CopticDate.from({ year, month: m!, day: d! });
         }
     }
 
@@ -44,11 +47,7 @@ export function getOccasionForCopticYear(occasion: CopticOccasion, year: number)
     // Special cases
     if (occasion === 'Easter') return easter;
 
-    // If not found, a naive search for spans (like Fasts) - though usually you'd want a range.
-    // This is for specific single-day events mainly.
-    // For now, return a dummy or threw error if strictly not found?
-    // The test expects a valid date for 'Nayrouz'.
-
+    // Fallback to Thout 1 if strictly not found (Nayrouz)
     return CopticDate.from({ year, month: 1, day: 1 });
 }
 
@@ -59,11 +58,21 @@ declare module '../../core/CopticDate.js' {
          * If locale is provided, returns localized names.
          */
         occasions(opts?: { locale?: Locale }): string[];
+
+        /**
+         * Returns the CopticDate of the given occasion in the same year as this date.
+         */
+        when(occasion: CopticOccasion): CopticDate;
+
+        /**
+         * Returns the next occurrence of the given occasion relative to this date.
+         */
+        next(occasion: CopticOccasion): CopticDate;
     }
 }
 
 /**
- * Injects the .occasions() method into the CopticDate primitive.
+ * Injects liturgical methods into the CopticDate primitive.
  */
 export function occasionsPlugin(CopticDateClass: typeof CopticDate): void {
     if (!CopticDateClass.prototype.occasions) {
@@ -76,6 +85,26 @@ export function occasionsPlugin(CopticDateClass: typeof CopticDate): void {
                 return raw.map((occ) => translateOccasion(occ, opts.locale!));
             }
             return raw;
+        };
+    }
+
+    if (!CopticDateClass.prototype.when) {
+        CopticDateClass.prototype.when = function (this: CopticDate, occasion: CopticOccasion): CopticDate {
+            return getOccasionForCopticYear(occasion, this.year);
+        };
+    }
+
+    if (!CopticDateClass.prototype.next) {
+        CopticDateClass.prototype.next = function (this: CopticDate, occasion: CopticOccasion): CopticDate {
+            const thisYearOccasion = getOccasionForCopticYear(occasion, this.year);
+            const thisJdn = copticToJDN(this.year, this.month, this.day);
+            const occJdn = copticToJDN(thisYearOccasion.year, thisYearOccasion.month, thisYearOccasion.day);
+
+            if (occJdn > thisJdn) {
+                return thisYearOccasion;
+            }
+
+            return getOccasionForCopticYear(occasion, this.year + 1);
         };
     }
 }

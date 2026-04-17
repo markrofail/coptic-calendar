@@ -1,5 +1,3 @@
-
-
 import { copticToJDN, jdnToCopticElements } from './computus.js';
 import { COPTIC_MONTHS, CALENDAR_UNITS } from './constants.js';
 import { translateMonth, type Locale } from './i18n.js';
@@ -68,14 +66,21 @@ export class CopticDate {
     }
 
     with(fields: { year?: number; month?: number; day?: number }): CopticDate {
-        const y = fields.year ?? this.year;
-        const m = fields.month ?? this.month;
-        let d = fields.day ?? this.day;
+        const { year: y, month: m, day: currentDay } = this;
+        const targetYear = fields.year ?? y;
+        const targetMonth = fields.month ?? m;
+        let d = fields.day ?? currentDay;
 
-        const maxDays = m === COPTIC_MONTHS.NASIE ? (y % 4 === 3 ? 6 : 5) : 30;
+        // Correctly calculate max days for the target month/year
+        const maxDays =
+            targetMonth === COPTIC_MONTHS.NASIE
+                ? targetYear % CALENDAR_UNITS.LEAP_YEAR_CYCLE === CALENDAR_UNITS.LEAP_YEAR_REMAINDER
+                    ? 6
+                    : 5
+                : CALENDAR_UNITS.DAYS_IN_MONTH;
         if (d > maxDays) d = maxDays;
 
-        return new CopticDate(y, m, d);
+        return new CopticDate(targetYear, targetMonth, d);
     }
 
     add(durationOption: DurationLike): CopticDate {

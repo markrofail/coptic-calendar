@@ -1,12 +1,17 @@
 import { CopticDate } from '../../core/CopticDate.js';
-import { getOccasions } from '../occasions/index.js';
-import { getEasterForCopticYear, copticToJDN } from '../../core/computus.js';
+import { getOccasions, getEasterForCopticYear } from '../occasions/index.js';
+import { copticToJDN } from '../../core/computus.js';
 import { RuleEngine } from '../../core/RuleEngine.js';
-import { LORD_FEASTS, type LiturgicalRite } from './constants.js';
 import { type Locale } from '../../core/i18n.js';
 import { translateSeason, translateTune } from './i18n.js';
 
 import { TYPICON_RULES, type TypiconContext } from './rules.js';
+
+export interface LiturgicalRite {
+    season: string;
+    tune: string;
+    hasMetanoias: boolean;
+}
 
 const engine = new RuleEngine<TypiconContext, LiturgicalRite>(TYPICON_RULES);
 

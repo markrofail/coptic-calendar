@@ -38,11 +38,14 @@ describe('Synaxarium Plugin', () => {
             title: 'St. Athanasius',
         },
         { month: 13, day: 6, expected: 'A Thanksgiving To God.', title: 'Leap Nasie' },
-    ])('should resolve commemoration for $title ($month-$day)', ({ month, day, expected }) => {
-        const date = CopticDate.from({ year: 1740, month, day });
-        const commemorations = (date as any).synaxarium();
-        expect(commemorations).toContain(expected);
-    });
+    ])(
+        'should resolve commemoration for $title ($month-$day)',
+        ({ month, day, expected }: { month: number; day: number; expected: string }) => {
+            const date = CopticDate.from({ year: 1740, month, day });
+            const commemorations = date.synaxarium();
+            expect(commemorations).toContain(expected);
+        },
+    );
 
     it('should return an empty array for days with no recorded commemorations', () => {
         // Technically all dates in the current registry should have something,

@@ -1,7 +1,6 @@
 import { CopticDate } from '../../../core/CopticDate.js';
 import { getLiturgicalRite, typiconPlugin } from '../index.js';
-import { getEasterForCopticYear } from '../../../core/computus.js';
-import { occasionsPlugin } from '../../occasions/index.js';
+import { occasionsPlugin, getEasterForCopticYear } from '../../occasions/index.js';
 
 // Initialize plugin
 CopticDate.extend(typiconPlugin);
@@ -143,7 +142,15 @@ describe('Typicon Plugin', () => {
         },
     ])(
         'should correctly resolve the rite for $title',
-        ({ date, offset, season, tune, metanoias }) => {
+        (item: {
+            date?: { year: number; month: number; day: number };
+            offset?: number;
+            season: string;
+            tune: string;
+            metanoias: boolean;
+            title: string;
+        }) => {
+            const { date, offset, season, tune, metanoias } = item;
             let testDate: CopticDate;
             if (offset !== undefined) {
                 const easter = getEasterForCopticYear(1740);

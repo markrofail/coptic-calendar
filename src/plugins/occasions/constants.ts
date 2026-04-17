@@ -63,3 +63,13 @@ export const FIXED_OCCASIONS: Record<string, CopticOccasion[]> = {
     [`${COPTIC_MONTHS.PASHONS}-24`]: ['FlightIntoEgypt'],
     [`${COPTIC_MONTHS.MESORI}-13`]: ['Transfiguration'],
 };
+
+/**
+ * Offsets and cycle constants for the Alexandrian Computus.
+ */
+export const COMPUTUS_CONSTANTS = {
+    JULIAN_YEAR_OFFSET: 284, // Anno Martyrum
+    METONIC_CYCLE: 19,
+    WEEK_CYCLE: 7,
+    LUNAR_MONTH_DAYS: 30,
+} as const;

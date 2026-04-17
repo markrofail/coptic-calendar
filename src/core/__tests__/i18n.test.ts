@@ -8,9 +8,9 @@ describe('toLocaleString', () => {
         { month: 13, locale: 'cop' as const, expected: '1 Ⲡⲓⲕⲟⲩϫⲓ ⲛ̀ⲁ̀ⲃⲟⲧ 1740' },
     ])(
         'should correctly format month $month for locale $locale',
-        ({ month, locale, expected }) => {
+        ({ month, locale, expected }: { month: number; locale: string; expected: string }) => {
             const date = CopticDate.from({ year: 1740, month, day: 1 });
-            expect(date.toLocaleString({ locale })).toBe(expected);
+            expect(date.toLocaleString({ locale: locale as any })).toBe(expected);
         },
     );
 

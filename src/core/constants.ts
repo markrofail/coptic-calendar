@@ -57,12 +57,3 @@ export const CALENDAR_UNITS = {
     LEAP_YEAR_REMAINDER: 3, // Coptic leap year is year % 4 === 3
 } as const;
 
-/**
- * Offsets and cycle constants for the Alexandrian Computus.
- */
-export const COMPUTUS_CONSTANTS = {
-    JULIAN_YEAR_OFFSET: 284, // Anno Martyrum
-    METONIC_CYCLE: 19,
-    WEEK_CYCLE: 7,
-    LUNAR_MONTH_DAYS: 30,
-} as const;

@@ -19,6 +19,7 @@ export const SYNAXARIUM_RULES: Rule<SynaxariumContext, string[]>[] = [
         // source: St-Takla
         // see: https://st-takla.org/Saints/Coptic-Orthodox-Saints-Biography/ (The Coptic Orthodox Daily Commemorative Registry)
         condition: () => true,
-        apply: (ctx) => (SYNAXARIUM_NAMES_EN as Record<string, string[]>)[`${ctx.month}-${ctx.day}`] || [],
+        apply: (ctx) =>
+            (SYNAXARIUM_NAMES_EN as Record<string, string[]>)[`${ctx.month}-${ctx.day}`] || [],
     },
 ];
