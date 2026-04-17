@@ -12,11 +12,14 @@ export interface OccasionContext {
 export type OccasionGenerator = (ctx: OccasionContext) => CopticOccasion[];
 
 export const OCCASION_GENERATORS: OccasionGenerator[] = [
-    // 1. Fixed Feasts Lookup
+    // source: St-Takla
+    // see: https://st-takla.org/Saints/Coptic-Orthodox-Saints-Biography/ (Daily commemorative registry - Synaxarium)
     (ctx: OccasionContext): CopticOccasion[] =>
         FIXED_OCCASIONS[`${ctx.date.month}-${ctx.date.day}`] || [],
 
     // 2. Fixed Fasts (Spans)
+    // source: SUS Copts
+    // see: https://suscopts.org/coptic-orthodox-church/fasts/ (Standard fast durations)
     (ctx: OccasionContext): CopticOccasion[] => {
         const res: CopticOccasion[] = [];
         if (ctx.date.month === COPTIC_MONTHS.MESORI && ctx.date.day >= 1 && ctx.date.day <= 15)
@@ -30,6 +33,8 @@ export const OCCASION_GENERATORS: OccasionGenerator[] = [
     },
 
     // 3. Mathematical diff against Easter
+    // source: SUS Copts
+    // see: https://suscopts.org/coptic-orthodox-church/fasts/great-lent/ (Mathematical diff against Easter)
     (ctx: OccasionContext): CopticOccasion[] => {
         const res: CopticOccasion[] = [];
         const diff = ctx.diffDays;
@@ -54,6 +59,8 @@ export const OCCASION_GENERATORS: OccasionGenerator[] = [
     },
 
     // 4. Paramoun (Vigil) Logic
+    // source: Coptic Heritage
+    // see: https://www.copticheritage.org/paramoun-rite (1-3 day sliding Paramoun duration)
     (ctx: OccasionContext): CopticOccasion[] => {
         const res: CopticOccasion[] = [];
         const feasts = [
@@ -69,9 +76,9 @@ export const OCCASION_GENERATORS: OccasionGenerator[] = [
             const diff = feastJdn - currentJdn;
 
             if (diff === 1) {
-                if (feastDayOfWeek !== 0 && feastDayOfWeek !== 1) res.push('Paramoun');
+                res.push('Paramoun');
             } else if (diff === 2) {
-                if (feastDayOfWeek === 0) res.push('Paramoun');
+                if (feastDayOfWeek === 0 || feastDayOfWeek === 1) res.push('Paramoun');
             } else if (diff === 3) {
                 if (feastDayOfWeek === 1) res.push('Paramoun');
             }

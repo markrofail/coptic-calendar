@@ -16,6 +16,8 @@ export const SYNAXARIUM_RULES: Rule<SynaxariumContext, string[]>[] = [
     {
         name: 'DailyCommemorationLookup',
         priority: 100,
+        // source: St-Takla
+        // see: https://st-takla.org/Saints/Coptic-Orthodox-Saints-Biography/ (The Coptic Orthodox Daily Commemorative Registry)
         condition: () => true,
         apply: (ctx) => SYNAXARIUM_NAMES[`${ctx.month}-${ctx.day}`] || [],
     },
