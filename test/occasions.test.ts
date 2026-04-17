@@ -1,6 +1,6 @@
 import { test } from '@jest/globals';
 import assert from 'node:assert';
-import { getOccasionForCopticYear } from '../src/occasions.js';
+import { getOccasionForCopticYear } from '../src/plugins/occasions.js';
 
 test('getOccasionForCopticYear routes properly', () => {
     const nayrouz = getOccasionForCopticYear('Nayrouz', 1740);

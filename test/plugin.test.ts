@@ -1,7 +1,8 @@
 import { test } from '@jest/globals';
 import assert from 'node:assert';
 import { CopticDate } from '../src/CopticDate.js';
-import { synaxariumPlugin, occasionsPlugin } from '../src/plugin.js';
+import { synaxariumPlugin } from '../src/plugins/synaxarium.js';
+import { occasionsPlugin } from '../src/plugins/occasions.js';
 
 test('Primitive operates naturally before plugin instantiation cleanly', () => {
     const coptic = CopticDate.from({ year: 1740, month: 1, day: 1 });

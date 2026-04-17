@@ -1,3 +1,5 @@
+import { CopticDate } from '../CopticDate.js';
+
 /**
  * A memory-efficient daily registry of commemorated Saints (Synaxarium).
  * Auto-generated via canonical Coptic Orthodox Church data mapping 365 Days natively.
@@ -1138,4 +1140,24 @@ export const SYNAXARIUM_NAMES: Record<string, string[]> = {
 export function getSynaxariumNames(month: number, day: number): string[] {
     const key = `${month}-${day}`;
     return SYNAXARIUM_NAMES[key] || [];
+}
+
+declare module '../CopticDate.js' {
+    interface CopticDate {
+        /**
+         * Resolves the canonical Church readings corresponding exactly sequentially to this native date.
+         */
+        synaxarium(): string[];
+    }
+}
+
+/**
+ * Injects the .synaxarium() method into the CopticDate primitive.
+ */
+export function synaxariumPlugin(CopticDateClass: typeof CopticDate): void {
+    if (!CopticDateClass.prototype.synaxarium) {
+        CopticDateClass.prototype.synaxarium = function (this: CopticDate): string[] {
+            return getSynaxariumNames(this.month, this.day);
+        };
+    }
 }

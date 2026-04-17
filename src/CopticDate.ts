@@ -8,6 +8,7 @@ export interface DurationLike {
 export type CopticDatePlugin = (copticClass: typeof CopticDate) => void;
 
 import { copticToJDN, jdnToCopticElements } from './computus.js';
+import { COPTIC_MONTHS, CALENDAR_UNITS } from './constants.js';
 
 export class CopticDate {
     public readonly year: number;
@@ -21,21 +22,21 @@ export class CopticDate {
     }
 
     get inLeapYear(): boolean {
-        return this.year % 4 === 3;
+        return this.year % CALENDAR_UNITS.LEAP_YEAR_CYCLE === CALENDAR_UNITS.LEAP_YEAR_REMAINDER;
     }
 
     get daysInMonth(): number {
-        if (this.month === 13) {
+        if (this.month === COPTIC_MONTHS.NASIE) {
             return this.inLeapYear ? 6 : 5;
         }
-        return 30;
+        return CALENDAR_UNITS.DAYS_IN_MONTH;
     }
 
     get daysInYear(): number {
-        return this.inLeapYear ? 366 : 365;
+        return this.inLeapYear ? CALENDAR_UNITS.DAYS_IN_LEAP_YEAR : CALENDAR_UNITS.DAYS_IN_YEAR;
     }
 
-    readonly monthsInYear = 13;
+    readonly monthsInYear = COPTIC_MONTHS.NASIE;
 
     static extend(plugin: CopticDatePlugin): typeof CopticDate {
         plugin(CopticDate);
@@ -71,7 +72,7 @@ export class CopticDate {
         const m = fields.month ?? this.month;
         let d = fields.day ?? this.day;
 
-        const maxDays = m === 13 ? (y % 4 === 3 ? 6 : 5) : 30;
+        const maxDays = m === COPTIC_MONTHS.NASIE ? (y % 4 === 3 ? 6 : 5) : 30;
         if (d > maxDays) d = maxDays;
 
         return new CopticDate(y, m, d);
@@ -87,17 +88,17 @@ export class CopticDate {
 
         // 2. Add months
         m += months;
-        while (m > 13) {
-            m -= 13;
+        while (m > COPTIC_MONTHS.NASIE) {
+            m -= COPTIC_MONTHS.NASIE;
             y++;
         }
         while (m < 1) {
-            m += 13;
+            m += COPTIC_MONTHS.NASIE;
             y--;
         }
 
         // Constrain days before adding weeks/days
-        const maxDays = m === 13 ? (y % 4 === 3 ? 6 : 5) : 30;
+        const maxDays = m === COPTIC_MONTHS.NASIE ? (y % 4 === 3 ? 6 : 5) : 30;
         if (d > maxDays) d = maxDays;
 
         // 3. Add weeks & days

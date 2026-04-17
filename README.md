@@ -73,15 +73,32 @@ const saints = getSynaxariumNames(nayrouz.month, nayrouz.day);
 If you prefer to attach the ecclesiastical features directly onto the `CopticDate` prototype (similar to standard legacy usage or libraries like `Day.js`), you can explicitly opt-in using the plugin securely without violating the generic standard interface inherently for others!
 
 ```typescript
-import { CopticDate, synaxariumPlugin, occasionsPlugin } from 'coptic-calendar';
+import { CopticDate, synaxariumPlugin, occasionsPlugin, typiconPlugin } from 'coptic-calendar';
 
 // 1. Extend the Primitive independently
-CopticDate.extend(synaxariumPlugin).extend(occasionsPlugin);
+CopticDate.extend(synaxariumPlugin).extend(occasionsPlugin).extend(typiconPlugin);
 
 // 2. Enjoy native method convenience directly flawlessly!
 const nayrouz = CopticDate.from({ year: 1740, month: 1, day: 1 });
 const saints = nayrouz.synaxarium();
 const occasions = nayrouz.occasions();
+const rite = nayrouz.rite(); // { season: 'Nayrouz', tune: 'Joyful', hasMetanoias: false }
+```
+
+## Typicon / Rite Rules Engine
+
+`coptic-calendar` provides a standalone zero-dependency Typicon evaluation engine! This solves the incredible headache of resolving complex Coptic Liturgical rules (such as overriding Fasts with Joyful Feasts or tracking when Metanoias are suppressed).
+
+Use the pure function, or simply install the `typiconPlugin` as seen above!
+
+```typescript
+import { getLiturgicalRite } from 'coptic-calendar';
+
+const lentWeekday = CopticDate.from({ year: 1740, month: 6, day: 20 });
+const rite = getLiturgicalRite(lentWeekday);
+
+console.log(rite);
+// { season: 'GreatLent', tune: 'Lenten', hasMetanoias: true }
 ```
 
 ## Running Tests
