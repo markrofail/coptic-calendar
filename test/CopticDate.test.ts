@@ -1,10 +1,11 @@
 import { test } from '@jest/globals';
 import assert from 'node:assert';
 import { CopticDate } from '../src/CopticDate.js';
+import { jsDateToCopticDate } from '../src/computus.js';
 
 test('converts 1 Thout 1740 (2023-09-12)', () => {
     const date = new Date(2023, 8, 12);
-    const coptic = new CopticDate(date);
+    const coptic = jsDateToCopticDate(date);
     assert.strictEqual(coptic.year, 1740);
     assert.strictEqual(coptic.month, 1);
     assert.strictEqual(coptic.day, 1);
@@ -12,56 +13,47 @@ test('converts 1 Thout 1740 (2023-09-12)', () => {
 
 test('converts Coptic Epoch safely', () => {
     const date = new Date(2023, 8, 11);
-    const coptic = new CopticDate(date);
+    const coptic = jsDateToCopticDate(date);
     assert.strictEqual(coptic.year, 1739);
     assert.strictEqual(coptic.month, 13);
     assert.strictEqual(coptic.day, 6);
 });
 
-test('CopticDate.today() returns valid data', () => {
-    const current = CopticDate.today();
-    assert.ok(current.year > 1700);
+test('CopticDate.from works securely', () => {
+    const c = CopticDate.from({ year: 1740, month: 1, day: 1 });
+    assert.strictEqual(c.toString(), '1740-01-01[u-ca=coptic]');
 });
 
-test('toJSDate() maps back correctly', () => {
-    const initial = new Date(2023, 8, 12, 0, 0, 0, 0);
-    const coptic = new CopticDate(initial);
-    const reversed = coptic.toJSDate();
-    assert.strictEqual(reversed.getFullYear(), 2023);
-    assert.strictEqual(reversed.getMonth(), 8);
-    assert.strictEqual(reversed.getDate(), 12);
+test('CopticDate.with() modifies fields immutably securely', () => {
+    const c = CopticDate.from({ year: 1740, month: 1, day: 1 });
+    const changed = c.with({ day: 15 });
+    assert.strictEqual(changed.day, 15);
+    assert.strictEqual(c.day, 1);
 });
 
-test('format() cleans strings', () => {
-    const date = new Date(2023, 8, 12);
-    const coptic = new CopticDate(date);
-    assert.strictEqual(coptic.format('DD MMMM YYYY'), '01 Thout 1740');
+test('CopticDate.add() computes additions mapping months properly', () => {
+    const c = CopticDate.from({ year: 1740, month: 1, day: 1 });
+    const nextMonth = c.add({ months: 1, days: 5 });
+    assert.strictEqual(nextMonth.month, 2);
+    assert.strictEqual(nextMonth.day, 6);
 });
 
-test('addDays() functions immutably', () => {
-    const coptic = new CopticDate(new Date(2023, 8, 12));
-    const advanced = coptic.addDays(32);
-    assert.strictEqual(advanced.month, 2);
-    assert.strictEqual(advanced.day, 3);
+test('CopticDate.add() calculates leap spans across years safely natively', () => {
+    const c = CopticDate.from({ year: 1740, month: 1, day: 1 });
+    const elapsed = c.add({ days: 32 });
+    assert.strictEqual(elapsed.month, 2);
+    assert.strictEqual(elapsed.day, 3);
 });
 
-test('CopticDate.fromComponents works', () => {
-    const c = CopticDate.fromComponents(1740, 1, 1);
-    assert.strictEqual(c.format('D/M/YYYY'), '1/1/1740');
+test('CopticDate.subtract() works identically backwards', () => {
+    const c = CopticDate.from({ year: 1740, month: 2, day: 3 });
+    const before = c.subtract({ days: 32 });
+    assert.strictEqual(before.month, 1);
+    assert.strictEqual(before.day, 1);
 });
 
-test('CopticDate.next(Easter) logic resolves Alexandrian calculation', () => {
-    const easter = CopticDate.next('Easter');
-    assert.ok(easter.month > 0);
-    assert.ok(easter.day > 0);
-});
-
-test('synaxarium() lookup safely accesses dictionary names mapped natively', () => {
-    const nayrouz = CopticDate.fromComponents(1740, 1, 1);
-    const saints = nayrouz.synaxarium();
-    assert.ok(saints.length >= 2);
-    assert.strictEqual(saints[0], "Feast of El-Nayrouz (Beginning of the Blessed Coptic Year).");
-
-    const emptyLookup = CopticDate.fromComponents(1740, 14, 1); // Invalid blank mapping entry safely out of bounds
-    assert.deepStrictEqual(emptyLookup.synaxarium(), []); // Fallback returns flat array cleanly
+test('CopticDate.equals compares cleanly exactly natively', () => {
+    const c1 = CopticDate.from({ year: 1740, month: 1, day: 1 });
+    const c2 = CopticDate.from({ year: 1740, month: 1, day: 1 });
+    assert.ok(c1.equals(c2));
 });

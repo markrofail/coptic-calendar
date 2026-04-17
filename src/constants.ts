@@ -1,11 +1,4 @@
-/**
- * Represents a date in the Coptic Calendar system.
- */
-export interface CopticDateType {
-    year: number;
-    month: number;
-    day: number;
-}
+
 
 /**
  * Array of all valid Coptic occasions logically mapped by the library.

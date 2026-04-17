@@ -1,5 +1,23 @@
 import { CopticDate } from './CopticDate.js';
 
+export function copticToJDN(year: number, month: number, day: number): number {
+    const COPTIC_EPOCH_JDN = 1825030;
+    const daysSinceEpoch =
+        365 * (year - 1) + Math.floor(year / 4) + 30 * (month - 1) + (day - 1);
+    return COPTIC_EPOCH_JDN + daysSinceEpoch;
+}
+
+export function jdnToCopticElements(jdn: number): { year: number; month: number; day: number } {
+    const COPTIC_EPOCH_JDN = 1825030;
+    const daysSinceEpoch = jdn - COPTIC_EPOCH_JDN;
+    const year = Math.floor((4 * daysSinceEpoch + 1463) / 1461);
+    const startOfYearJDN = COPTIC_EPOCH_JDN + 365 * (year - 1) + Math.floor(year / 4);
+    const dayOfYear = jdn - startOfYearJDN + 1;
+    const month = Math.floor((dayOfYear - 1) / 30) + 1;
+    const day = ((dayOfYear - 1) % 30) + 1;
+    return { year, month, day };
+}
+
 /**
  * Computes the Julian Day Number (JDN) from a standard Gregorian date.
  * JDN is a continuous integer count of days since January 1, 4713 BC.
@@ -20,6 +38,15 @@ export function gregorianToJDN(year: number, month: number, day: number): number
         leapCenturyCorrection -
         1524
     );
+}
+
+export function jsDateToCopticDate(date: Date): CopticDate {
+    const gregYear = date.getFullYear();
+    const gregMonth = date.getMonth() + 1;
+    const gregDay = date.getDate();
+    const jdn = gregorianToJDN(gregYear, gregMonth, gregDay);
+    const elements = jdnToCopticElements(jdn);
+    return CopticDate.from(elements);
 }
 
 /**
@@ -43,11 +70,14 @@ export function getEasterForCopticYear(copticYear: number): CopticDate {
     }
     const jdn = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day - 1524;
 
-    const daysSince1970 = jdn - 2440588;
-    const utcDate = new Date(daysSince1970 * 86400000);
-    const localDate = new Date();
-    localDate.setFullYear(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate());
-    localDate.setHours(0, 0, 0, 0);
+    // calculate Coptic Date properties directly using JDN
+    const COPTIC_EPOCH_JDN = 1825030;
+    const daysSinceEpoch = jdn - COPTIC_EPOCH_JDN;
+    const yearOutput = Math.floor((4 * daysSinceEpoch + 1463) / 1461);
+    const startOfYearJDN = COPTIC_EPOCH_JDN + 365 * (yearOutput - 1) + Math.floor(yearOutput / 4);
+    const dayOfYear = jdn - startOfYearJDN + 1;
+    const monthOutput = Math.floor((dayOfYear - 1) / 30) + 1;
+    const dayOutput = ((dayOfYear - 1) % 30) + 1;
 
-    return new CopticDate(localDate);
+    return CopticDate.from({ year: yearOutput, month: monthOutput, day: dayOutput });
 }

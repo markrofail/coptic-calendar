@@ -1,31 +1,31 @@
 import { CopticDate } from './CopticDate.js';
 import type { CopticOccasion } from './constants.js';
-import { getEasterForCopticYear } from './computus.js';
+import { getEasterForCopticYear, copticToJDN } from './computus.js';
 
 export function getOccasionForCopticYear(occasion: CopticOccasion, year: number): CopticDate {
     switch (occasion) {
-        case 'Nayrouz': return CopticDate.fromComponents(year, 1, 1);
-        case 'FeastOfTheCross': return CopticDate.fromComponents(year, 1, 17);
-        case 'NativityFast': return CopticDate.fromComponents(year, 3, 16);
-        case 'Nativity': return CopticDate.fromComponents(year, 4, 29);
-        case 'Circumcision': return CopticDate.fromComponents(year, 5, 6);
-        case 'Theophany': return CopticDate.fromComponents(year, 5, 11);
-        case 'WeddingAtCana': return CopticDate.fromComponents(year, 5, 13);
-        case 'EntranceToTemple': return CopticDate.fromComponents(year, 6, 8);
-        case 'Annunciation': return CopticDate.fromComponents(year, 7, 29);
-        case 'FlightIntoEgypt': return CopticDate.fromComponents(year, 9, 24);
-        case 'StMarysFast': return CopticDate.fromComponents(year, 12, 1);
-        case 'Transfiguration': return CopticDate.fromComponents(year, 12, 13);
+        case 'Nayrouz': return CopticDate.from({ year, month: 1, day: 1 });
+        case 'FeastOfTheCross': return CopticDate.from({ year, month: 1, day: 17 });
+        case 'NativityFast': return CopticDate.from({ year, month: 3, day: 16 });
+        case 'Nativity': return CopticDate.from({ year, month: 4, day: 29 });
+        case 'Circumcision': return CopticDate.from({ year, month: 5, day: 6 });
+        case 'Theophany': return CopticDate.from({ year, month: 5, day: 11 });
+        case 'WeddingAtCana': return CopticDate.from({ year, month: 5, day: 13 });
+        case 'EntranceToTemple': return CopticDate.from({ year, month: 6, day: 8 });
+        case 'Annunciation': return CopticDate.from({ year, month: 7, day: 29 });
+        case 'FlightIntoEgypt': return CopticDate.from({ year, month: 9, day: 24 });
+        case 'StMarysFast': return CopticDate.from({ year, month: 12, day: 1 });
+        case 'Transfiguration': return CopticDate.from({ year, month: 12, day: 13 });
 
         case 'Easter': return getEasterForCopticYear(year);
-        case 'JonahsFast': return getEasterForCopticYear(year).addDays(-69);
-        case 'Lent': return getEasterForCopticYear(year).addDays(-55);
-        case 'PalmSunday': return getEasterForCopticYear(year).addDays(-7);
-        case 'CovenantThursday': return getEasterForCopticYear(year).addDays(-3);
-        case 'ThomasSunday': return getEasterForCopticYear(year).addDays(7);
-        case 'Ascension': return getEasterForCopticYear(year).addDays(39);
-        case 'Pentecost': return getEasterForCopticYear(year).addDays(49);
-        case 'ApostlesFast': return getEasterForCopticYear(year).addDays(50);
+        case 'JonahsFast': return getEasterForCopticYear(year).subtract({ days: 69 });
+        case 'Lent': return getEasterForCopticYear(year).subtract({ days: 55 });
+        case 'PalmSunday': return getEasterForCopticYear(year).subtract({ days: 7 });
+        case 'CovenantThursday': return getEasterForCopticYear(year).subtract({ days: 3 });
+        case 'ThomasSunday': return getEasterForCopticYear(year).add({ days: 7 });
+        case 'Ascension': return getEasterForCopticYear(year).add({ days: 39 });
+        case 'Pentecost': return getEasterForCopticYear(year).add({ days: 49 });
+        case 'ApostlesFast': return getEasterForCopticYear(year).add({ days: 50 });
 
         default: throw new Error(`Unknown occasion: ${occasion}`);
     }
@@ -61,9 +61,9 @@ export function getOccasionsOnCopticDate(date: CopticDate): CopticOccasion[] {
 
     // 2. Evaluate Floating Feasts (Mathematical diff against Easter)
     const easter = getEasterForCopticYear(year);
-    const easterTime = easter.toJSDate().getTime();
-    const currentTime = date.toJSDate().getTime();
-    const diffDays = Math.round((currentTime - easterTime) / 86400000);
+    const easterJdn = copticToJDN(easter.year, easter.month, easter.day);
+    const currentJdn = copticToJDN(date.year, date.month, date.day);
+    const diffDays = currentJdn - easterJdn;
 
     if (diffDays === 0) results.push('Easter');
     if (diffDays >= -55 && diffDays < 0) results.push('Lent');

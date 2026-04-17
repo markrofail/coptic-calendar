@@ -19,40 +19,40 @@ npm install coptic-calendar
 ## Quick Start
 
 ```typescript
-import { CopticDate } from 'coptic-calendar';
+import { CopticDate, jsDateToCopticDate } from 'coptic-calendar';
 
 // Instantiate directly mapped from your native Timezone execution
-const today = CopticDate.today();
-console.log(today.format('DD MMMM YYYY')); // e.g: "29 Koiak 1740"
+const jsDate = new Date();
+const today = jsDateToCopticDate(jsDate);
+console.log(today.toString()); // "1740-04-29[u-ca=coptic]"
 
-// Or explicitly instantiate from native Gregorian Dates natively
-const jsDate = new Date('2024-01-08');
-const coptic = CopticDate.fromJSDate(jsDate);
+// Or instantiate from explicit components via the Temporal API signature
+const coptic = CopticDate.from({ year: 1740, month: 4, day: 29 });
 
 console.log(coptic.year); // 1740
 console.log(coptic.month); // 4
 console.log(coptic.day); // 29
-
-// Convert seamlessly back to Native JS Dates
-const backToGregorian = coptic.toJSDate();
 ```
 
-## Immutable Native Math
+## Immutable Temporal API Interfaces
 
-Add or subtract days safely tracking Leap Year Coptic thresholds beautifully across the 13 months!
+Add or subtract safely tracking Leap Year Coptic thresholds natively properly properly beautifully matching `Temporal.PlainDate`!
 
 ```typescript
-const startOfLent = CopticDate.fromComponents(1740, 6, 2);
-const dayIntoLent = startOfLent.addDays(15);
+const startOfLent = CopticDate.from({ year: 1740, month: 6, day: 2 });
+const dayIntoLent = startOfLent.add({ days: 15 });
+const beforeLent = startOfLent.subtract({ weeks: 1 });
 ```
 
 ## Feast and Fast Evaluation
 
-Track all ecclesiastical block bounds and dates natively via purely efficient evaluation wrappers!
+Track all ecclesiastical block bounds and dates natively via pure function wrappers without prototype bloat!
 
 ```typescript
-const checkingDate = CopticDate.fromComponents(1740, 6, 15);
-const currentOccasions = checkingDate.occasions(); 
+import { getOccasionsOnCopticDate } from 'coptic-calendar';
+
+const checkingDate = CopticDate.from({ year: 1740, month: 6, day: 15 });
+const currentOccasions = getOccasionsOnCopticDate(checkingDate); 
 // Returns ['Lent'] successfully capturing elapsed tracking inside the internal range dynamically!
 ```
 
@@ -61,9 +61,27 @@ const currentOccasions = checkingDate.occasions();
 Effortlessly expose localized ecclesiastical memory data corresponding smoothly to daily commemorations!
 
 ```typescript
-const nayrouz = CopticDate.fromComponents(1740, 1, 1);
-const saints = nayrouz.synaxarium();
+import { getSynaxariumNames } from 'coptic-calendar';
+
+const nayrouz = CopticDate.from({ year: 1740, month: 1, day: 1 });
+const saints = getSynaxariumNames(nayrouz.month, nayrouz.day);
 // ['Feast of El-Nayrouz (Beginning of the Blessed Coptic Year).', ...] 
+```
+
+## Plugin Extension (For Maximum Convenience)
+
+If you prefer to attach the ecclesiastical features directly onto the `CopticDate` prototype (similar to standard legacy usage or libraries like `Day.js`), you can explicitly opt-in using the plugin securely without violating the generic standard interface inherently for others!
+
+```typescript
+import { CopticDate, synaxariumPlugin, occasionsPlugin } from 'coptic-calendar';
+
+// 1. Extend the Primitive independently
+CopticDate.extend(synaxariumPlugin).extend(occasionsPlugin);
+
+// 2. Enjoy native method convenience directly flawlessly!
+const nayrouz = CopticDate.from({ year: 1740, month: 1, day: 1 });
+const saints = nayrouz.synaxarium();
+const occasions = nayrouz.occasions();
 ```
 
 ## Running Tests
