@@ -1,6 +1,6 @@
 import { CopticDate } from '../../../core/CopticDate.js';
 import { getLiturgicalRite, typiconPlugin } from '../index.js';
-import { occasionsPlugin, getEasterForCopticYear } from '../../occasions/index.js';
+import { getEasterForCopticYear } from '../../occasions/index.js';
 
 // Initialize plugin
 CopticDate.extend(typiconPlugin);
@@ -158,8 +158,10 @@ describe('Typicon Plugin', () => {
                     offset < 0
                         ? easter.subtract({ days: Math.abs(offset) })
                         : easter.add({ days: offset });
+            } else if (date) {
+                testDate = CopticDate.from(date);
             } else {
-                testDate = CopticDate.from(date!);
+                throw new Error('Test case must provide date or offset');
             }
 
             const rite = testDate.rite();

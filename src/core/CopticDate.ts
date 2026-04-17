@@ -52,7 +52,7 @@ export class CopticDate {
 
     readonly monthsInYear = COPTIC_MONTHS.NASIE;
 
-    static extend(plugin: (copticClass: typeof CopticDate) => void) {
+    static extend(plugin: (copticClass: typeof CopticDate) => void): void {
         plugin(CopticDate);
     }
 

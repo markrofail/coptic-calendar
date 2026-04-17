@@ -61,7 +61,7 @@ describe('Occasions Plugin', () => {
         [1740, 4, 28, '3-day Paramoun (Sun feast - Sat)'],
         [1740, 4, 27, '3-day Paramoun (Sun feast - Fri)'],
         [1740, 4, 26, '3-day Paramoun (Sun feast - Thu)'],
-    ])('should resolve %s', (year: number, month: number, day: number, title: string) => {
+    ])('should resolve %s', (year: number, month: number, day: number, _title: string) => {
         const d = CopticDate.from({ year, month, day });
         expect(d.occasions()).toContain('Paramoun');
     });
@@ -130,7 +130,7 @@ describe('Occasions Plugin', () => {
     it('should resolve all floating feasts relative to Easter', () => {
         const easter = getEasterForCopticYear(1740); // April 22, 2024 -> 2460423
 
-        const testCase = (offset: number, expected: string) => {
+        const testCase = (offset: number, expected: string): void => {
             const d = CopticDate.fromJDN(easter.jdn + offset);
             expect(d.occasions()).toContain(expected);
         };

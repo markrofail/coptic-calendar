@@ -19,8 +19,8 @@ describe('CopticDate', () => {
     });
 
     it('should throw TypeError on invalid .from() input', () => {
-        expect(() => CopticDate.from('invalid' as any)).toThrow(TypeError);
-        expect(() => CopticDate.from(null as any)).toThrow(TypeError);
+        expect(() => CopticDate.from('invalid')).toThrow(TypeError);
+        expect(() => CopticDate.from(null)).toThrow(TypeError);
     });
 
     it('should identify leap years correctly (year % 4 === 3)', () => {

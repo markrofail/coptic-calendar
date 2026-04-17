@@ -5,3 +5,4 @@ coverage/
 *.log
 .env
 test_output.txt
+lint_errors.txt

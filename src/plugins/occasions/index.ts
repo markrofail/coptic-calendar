@@ -33,7 +33,7 @@ export function getOccasionForCopticYear(occasion: CopticOccasion, year: number)
     for (const [key, occasions] of Object.entries(FIXED_OCCASIONS)) {
         if (occasions.includes(occasion)) {
             const [m, d] = key.split('-').map(Number);
-            return CopticDate.from({ year, month: m!, day: d! });
+            return CopticDate.from({ year, month: m ?? 1, day: d ?? 1 });
         }
     }
 
@@ -81,8 +81,9 @@ export function occasionsPlugin(CopticDateClass: typeof CopticDate): void {
             opts?: { locale?: Locale },
         ): string[] {
             const raw = getOccasions(this);
-            if (opts && opts.locale) {
-                return raw.map((occ) => translateOccasion(occ, opts.locale!));
+            if (opts?.locale) {
+                const locale = opts.locale;
+                return raw.map((occ) => translateOccasion(occ, locale));
             }
             return raw;
         };
