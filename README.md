@@ -1,15 +1,35 @@
-# Coptic Calendar
+# coptic-calendar
 
-A lightning-fast, zero-dependency TypeScript library for comprehensive Coptic calendar conversions, ecclesiastical fast/feast spanning, and native Synaxarium lookups.
+<!-- Placeholder for logo -->
+<div align="center">
+
+  <!-- Logo placeholder -->
+  <img src="docs/logo.png" alt="Logo" width="200" height="200">
+
+</div>
+
+<!-- Shields -->
+<div align="center">
+
+[![CI](https://img.shields.io/github/actions/workflow/status/markrofail/coptic-calendar/ci.yml?branch=main&label=CI&style=for-the-badge)](https://github.com/markrofail/coptic-calendar/actions/workflows/ci.yml)
+[![NPM Version](https://img.shields.io/npm/v/coptic-calendar?style=for-the-badge)](https://www.npmjs.com/package/coptic-calendar?s)
+[![License](https://img.shields.io/github/license/markrofail/coptic-calendar?style=for-the-badge)](LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/markrofail/coptic-calendar?style=for-the-badge)](https://github.com/markrofail/coptic-calendar/issues)
+[![GitHub stars](https://img.shields.io/github/stars/markrofail/coptic-calendar?style=for-the-badge)](https://github.com/markrofail/coptic-calendar/stargazers)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://github.com/markrofail/coptic-calendar/pulls)
+
+</div>
+
+<!-- Badges row end -->
 
 ## Features
 
-- **Julian Day Number Arithmetic**: Calculates exact leap year offsets and calendar drift purely mathematically (O(1) speeds naturally) without any external dependency limits.
-- **Ecclesiastical Occasions Mapping**: Dynamically tracks both fixed feasts and calculates Alexandrian floating algorithms (Easter spans) to resolve Coptic fasts (Lent, Apostles, Jonah's, etc.) over continuous block spans flexibly!
-- **365-Day English Synaxarium Canonical Match**: Integrated mappings containing the authentic comprehensive ecclesiastical names for the Saints commemorated daily, evaluated canonically from the church's core payloads securely.
-- **Robust formatting & OOP methods**: Fluent immutable APIs to perform arithmetic gracefully (`.addDays()`) and formatting string tokens seamlessly natively (`.format("YYYY MMMM DD")`).
-- **Fully ESM and Type-Safe**: Ships with explicit TS definitions natively optimized.
-- **Canonical & Historical Purity**: Extensively cited and attributed to the Council of Nicaea (325 AD) and modern Diocesan authorities (SUS Copts, LACopts).
+- **Accurate Calendar Conversions**: High-precision algorithms for converting between Coptic and Gregorian calendars.
+- **Ecclesiastical Computus**: Built-in support for the Paschal cycle, allowing calculation of moving feasts and fasts.
+- **Multi-language Support (i18n)**: Native support for English, Arabic, and Coptic (Bohairic) languages.
+- **Plugin System**: Extensible architecture with dedicated plugins for Synaxarium, Occasions, and Typicon data.
+- **TypeScript Native**: Written in TypeScript with full type definitions for a superior developer experience.
+- **Zero Dependencies**: Lightweight and fast footprint with no external dependencies.
 
 ## Installation
 
@@ -17,109 +37,104 @@ A lightning-fast, zero-dependency TypeScript library for comprehensive Coptic ca
 npm install coptic-calendar
 ```
 
-## Quick Start
+## Usage
+
+### Basic Conversion
 
 ```typescript
-import { CopticDate, jsDateToCopticDate } from 'coptic-calendar';
+import { CopticDate } from 'coptic-calendar';
 
-// Instantiate directly mapped from your native Timezone execution
-const jsDate = new Date();
-const today = jsDateToCopticDate(jsDate);
-console.log(today.toString()); // "1740-04-29[u-ca=coptic]"
+// Polymorphic .from() supports Dates, strings, timestamps, and elements
+const date = CopticDate.from({ year: 1740, month: 5, day: 23 });
 
-// Or instantiate from explicit components via the Temporal API signature
-const coptic = CopticDate.from({ year: 1740, month: 4, day: 29 });
+// Access calendar components
+console.log(`Coptic Date: ${date.year}-${date.month}-${date.day}`); // "1740-5-23"
+console.log(`Is Leap Year: ${date.inLeapYear}`); // false
 
-console.log(coptic.year); // 1740
-console.log(coptic.month); // 4
-console.log(coptic.day); // 29
+// Multi-language localization support
+console.log(date.toLocaleString({ locale: 'en' })); // "23 Tobi 1740"
+console.log(date.toLocaleString({ locale: 'ar' })); // "٢٣ طوبة ١٧٤٠"
 ```
 
-## Immutable Temporal API Interfaces
-
-Add or subtract safely tracking Leap Year Coptic thresholds natively properly properly beautifully matching `Temporal.PlainDate`!
+### Date Arithmetic & Comparison
 
 ```typescript
-const startOfLent = CopticDate.from({ year: 1740, month: 6, day: 2 });
-const dayIntoLent = startOfLent.add({ days: 15 });
-const beforeLent = startOfLent.subtract({ weeks: 1 });
+const start = CopticDate.from('2024-01-01'); // 22 Kiahk 1740
+
+// Addition and Subtraction
+const nextMonth = start.add({ months: 1 }); // 22 Tobi 1740
+const lastYear = start.subtract({ years: 1 }); // 22 Kiahk 1739
+
+// Fluent modification
+const specificDay = start.with({ day: 15 }); // 15 Kiahk 1740
+
+// Comparison
+if (start.equals(nextMonth)) { /* ... */ } // false
+const order = CopticDate.compare(start, nextMonth); // -1 (start < nextMonth)
 ```
 
-## Feast and Fast Evaluation
+### Plugin System
 
-Track all ecclesiastical block bounds and dates natively via pure function wrappers without prototype bloat!
+The library is lightweight by default, but can be extended with specialized plugins for ecclesiastical data.
+
+#### Synaxarium Plugin
+Provides daily saint commemorations and historical readings.
 
 ```typescript
-import { getOccasionsOnCopticDate } from 'coptic-calendar';
+import { CopticDate } from 'coptic-calendar';
+import { synaxariumPlugin } from 'coptic-calendar/plugins/synaxarium';
 
-const checkingDate = CopticDate.from({ year: 1740, month: 6, day: 15 });
-const currentOccasions = getOccasionsOnCopticDate(checkingDate); 
-// Returns ['Lent'] successfully capturing elapsed tracking inside the internal range dynamically!
+CopticDate.extend(synaxariumPlugin);
+
+const date = CopticDate.from('2024-04-19'); // 12 Paremoude 1740
+console.log(date.synaxarium({ locale: 'en' })); 
+// ["The Departure of St. Alexander, Bishop of Jerusalem.", ...]
 ```
 
-## Canonical Synaxarium Lookups
-
-Effortlessly expose localized ecclesiastical memory data corresponding smoothly to daily commemorations!
+#### Occasions Plugin
+Calculates all liturgical feasts and fasts, including the moving Paschal cycle.
 
 ```typescript
-import { getSynaxariumNames } from 'coptic-calendar';
+import { CopticDate } from 'coptic-calendar';
+import { occasionsPlugin } from 'coptic-calendar/plugins/occasions';
 
-const nayrouz = CopticDate.from({ year: 1740, month: 1, day: 1 });
-const saints = getSynaxariumNames(nayrouz.month, nayrouz.day);
-// ['Feast of El-Nayrouz (Beginning of the Blessed Coptic Year).', ...] 
+CopticDate.extend(occasionsPlugin);
+
+const date = CopticDate.from('2024-04-19');
+console.log(date.occasions({ locale: 'en' })); // ["Great Lent"]
+
+// Find specific occasions
+const easter = date.when('Easter');
+console.log(`Easter is on: ${easter.toString()}`); // "1740-8-27"
 ```
 
-## Plugin Extension (For Maximum Convenience)
-
-If you prefer to attach the ecclesiastical features directly onto the `CopticDate` prototype (similar to standard legacy usage or libraries like `Day.js`), you can explicitly opt-in using the plugin securely without violating the generic standard interface inherently for others!
+#### Typicon Plugin
+Derives the active canonical Typicon configuration (season, tune, etc.) for any date.
 
 ```typescript
-import { CopticDate, synaxariumPlugin, occasionsPlugin, typiconPlugin } from 'coptic-calendar';
+import { CopticDate } from 'coptic-calendar';
+import { typiconPlugin } from 'coptic-calendar/plugins/typicon';
 
-// 1. Extend the Primitive independently
-CopticDate.extend(synaxariumPlugin).extend(occasionsPlugin).extend(typiconPlugin);
+CopticDate.extend(typiconPlugin);
 
-// 2. Enjoy native method convenience directly flawlessly!
-const nayrouz = CopticDate.from({ year: 1740, month: 1, day: 1 });
-const saints = nayrouz.synaxarium();
-const occasions = nayrouz.occasions();
-const rite = nayrouz.rite(); // { season: 'Nayrouz', tune: 'Joyful', hasMetanoias: false }
+const date = CopticDate.from('2024-04-19');
+const rite = date.rite({ locale: 'en' });
+
+console.log(`Season: ${rite.season}`);   // "Great Lent"
+console.log(`Tune: ${rite.tune}`);       // "Lenten"
+console.log(`Metanoias: ${rite.hasMetanoias}`); // true
 ```
 
-## Typicon / Rite Rules Engine
+## Contribution
 
-`coptic-calendar` provides a standalone zero-dependency Typicon evaluation engine! This solves the incredible headache of resolving complex Coptic Liturgical rules (such as overriding Fasts with Joyful Feasts or tracking when Metanoias are suppressed).
+We welcome contributions! Please follow these steps:
 
-Use the pure function, or simply install the `typiconPlugin` as seen above!
-
-```typescript
-import { getLiturgicalRite } from 'coptic-calendar';
-
-const lentWeekday = CopticDate.from({ year: 1740, month: 6, day: 20 });
-const rite = getLiturgicalRite(lentWeekday);
-
-console.log(rite);
-// { season: 'GreatLent', tune: 'Lenten', hasMetanoias: true }
-```
-
-## Canonical Foundations
-
-This library's credibility is built on authoritative ecclesiastical and historical sources:
-
-| Authority | Area of Influence |
-| :--- | :--- |
-| **Council of Nicaea (325 AD)** | The Alexandrian Computus algorithm used for Easter calculations. |
-| **SUS Copts Diocese** | Definitions of Lordly Feasts and Fasting durations. |
-| **LACopts Diocese** | Precise Typicon rules for the 29th commemoration of the Lord. |
-| **St-Takla.org** | Fixed feast dates and daily Synaxarium registry. |
-| **Pope Shenouda III** | Standardized fasting durations (Lent, Nativity, Apostles). |
-
-## Running Tests
-
-```bash
-npm install
-npm test
-```
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
-MIT
+
+This project is licensed under **The Unlicense** - see the [LICENSE](LICENSE) file for details.
