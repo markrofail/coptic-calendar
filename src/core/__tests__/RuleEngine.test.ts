@@ -5,7 +5,12 @@ describe('RuleEngine', () => {
         match?: boolean;
     }
     const rules: Rule<TestCtx, string>[] = [
-        { name: 'LowPriority', priority: 100, condition: (): boolean => true, apply: (): string => 'low' },
+        {
+            name: 'LowPriority',
+            priority: 100,
+            condition: (): boolean => true,
+            apply: (): string => 'low',
+        },
         {
             name: 'HighPriority',
             priority: 10,
@@ -31,7 +36,12 @@ describe('RuleEngine', () => {
 
     it('should hit the end of the loop when no rules match', () => {
         const engine = new RuleEngine<TestCtx, string>([
-            { name: 'Fail', priority: 1, condition: (): boolean => false, apply: (): string => 'fail' },
+            {
+                name: 'Fail',
+                priority: 1,
+                condition: (): boolean => false,
+                apply: (): string => 'fail',
+            },
         ]);
         expect(engine.resolve({})).toBe(null);
     });
@@ -63,8 +73,18 @@ describe('RuleEngine', () => {
 
     it('should choose the first rule in list order if priorities are equal', () => {
         const tiedRules: Rule<Record<string, unknown>, string>[] = [
-            { name: 'First', priority: 50, condition: (): boolean => true, apply: (): string => 'first' },
-            { name: 'Second', priority: 50, condition: (): boolean => true, apply: (): string => 'second' },
+            {
+                name: 'First',
+                priority: 50,
+                condition: (): boolean => true,
+                apply: (): string => 'first',
+            },
+            {
+                name: 'Second',
+                priority: 50,
+                condition: (): boolean => true,
+                apply: (): string => 'second',
+            },
         ];
         const tiedEngine = new RuleEngine<Record<string, unknown>, string>(tiedRules);
         expect(tiedEngine.resolve({})).toBe('first');

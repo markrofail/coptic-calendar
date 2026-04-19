@@ -19,7 +19,7 @@ describe('CopticDate', () => {
     });
 
     it('should handle .from() with a native Date object', () => {
-        const date = new Date(2023, 8, 12);
+        const date = new Date(Date.UTC(2023, 8, 12));
         const coptic = CopticDate.from(date);
         expect(coptic.year).toBe(1740);
         expect(coptic.month).toBe(1);
@@ -27,7 +27,7 @@ describe('CopticDate', () => {
     });
 
     it('should handle .from() with a numeric timestamp', () => {
-        const timestamp = new Date(2023, 8, 12).getTime();
+        const timestamp = Date.UTC(2023, 8, 12);
         const coptic = CopticDate.from(timestamp);
         expect(coptic.year).toBe(1740);
     });
@@ -40,13 +40,13 @@ describe('CopticDate', () => {
     });
 
     it('should handle .from() with a Temporal-like object', () => {
-        const instant = { epochMilliseconds: new Date(2023, 8, 12).getTime() };
+        const instant = { epochMilliseconds: Date.UTC(2023, 8, 12) };
         const coptic = CopticDate.from(instant);
         expect(coptic.year).toBe(1740);
     });
 
     it('should handle .from() with a custom object having .toJSDate()', () => {
-        const custom = { toJSDate: () => new Date(2023, 8, 12) };
+        const custom = { toJSDate: (): Date => new Date(Date.UTC(2023, 8, 12)) };
         const coptic = CopticDate.from(custom);
         expect(coptic.year).toBe(1740);
         expect(coptic.month).toBe(1);
@@ -54,11 +54,14 @@ describe('CopticDate', () => {
     });
 
     it('should throw TypeError on invalid .from() input with descriptive message', () => {
-        expect(() => CopticDate.from(undefined)).toThrow(/Cannot convert undefined to CopticDate/);
-        expect(() => CopticDate.from(null)).toThrow(/Cannot convert null to CopticDate/);
-        expect(() => CopticDate.from({})).toThrow(/Cannot convert \[object Object\] to CopticDate/);
+        // @ts-expect-error -- testing invalid input
+        expect(() => CopticDate.from(undefined)).toThrow(/Cannot convert null or undefined to CopticDate/);
+        // @ts-expect-error -- testing invalid input
+        expect(() => CopticDate.from(null)).toThrow(/Cannot convert null or undefined to CopticDate/);
+        // @ts-expect-error -- testing invalid input
+        expect(() => CopticDate.from({})).toThrow(/Unrecognized date format: {}/);
         expect(() => CopticDate.from('not-a-date')).toThrow(
-            /Cannot convert not-a-date to CopticDate/,
+            /Invalid date value parsed from: "not-a-date"/,
         );
     });
 

@@ -209,14 +209,17 @@ describe('Typicon Plugin', () => {
         { date: { month: 10, day: 29 }, expectedSeason: 'CommemorationOfLord' }, // Paoni 29
         { offset: 49, expectedSeason: 'Pentecost' },
         { offset: -66, expectedSeason: 'JonahsPassover' },
-    ])('should resolve $expectedSeason on date $date or offset $offset', ({ date, offset, expectedSeason }) => {
-        let d: CopticDate;
-        if (date) {
-            d = CopticDate.from({ year: 1740, ...date });
-        } else {
-            const easter = getEasterForCopticYear(1740);
-            d = CopticDate.fromJDN(easter.jdn + (offset as number));
-        }
-        expect(d.rite().season).toBe(expectedSeason);
-    });
+    ])(
+        'should resolve $expectedSeason on date $date or offset $offset',
+        ({ date, offset, expectedSeason }) => {
+            let d: CopticDate;
+            if (date) {
+                d = CopticDate.from({ year: 1740, ...date });
+            } else {
+                const easter = getEasterForCopticYear(1740);
+                d = CopticDate.fromJDN(easter.jdn + (offset as number));
+            }
+            expect(d.rite().season).toBe(expectedSeason);
+        },
+    );
 });

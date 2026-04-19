@@ -62,7 +62,7 @@ export class CopticDate {
         | number
         | { year: number; month: number; day: number }
         | { epochMilliseconds: number }
-        | { toJSDate: () => Date };): CopticDate {
+        | { toJSDate: () => Date }): CopticDate {
         if (item === null || item === undefined) {
             throw new TypeError("Cannot convert null or undefined to CopticDate");
         }
