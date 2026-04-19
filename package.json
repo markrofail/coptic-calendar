@@ -1,6 +1,9 @@
 {
   "name": "coptic-calendar",
   "version": "1.0.0",
+  "description": "A high-precision, polymorphic Coptic calendar library for TypeScript and Node.js.",
+  "license": "Unlicense",
+  "author": "Mark Rofail",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,18 +17,35 @@
       "import": "./dist/plugins/*/index.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markrofail/coptic-calendar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/markrofail/coptic-calendar/issues"
+  },
+  "homepage": "https://github.com/markrofail/coptic-calendar#readme",
+  "keywords": [
+    "coptic",
+    "calendar",
+    "liturgical",
+    "orthodox",
+    "date",
+    "alexandrian"
+  ],
+  "files": [
+    "dist",
+    "!dist/**/__tests__"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
     "format": "prettier --write 'src/**/*.ts'",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepublishOnly": "npm run lint && npm test && npm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",

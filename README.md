@@ -1,10 +1,9 @@
-# coptic-calendar
-
 <!-- Placeholder for logo -->
 <div align="center">
 
   <!-- Logo placeholder -->
   <img src="docs/logo.png" alt="Logo" width="200" height="200">
+  <h3>Coptic Calendar</h3>
 
 </div>
 
