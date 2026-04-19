@@ -8,6 +8,8 @@
 
 </div>
 
+high-precision, polymorphic library for the Coptic liturgical calendar, featuring advanced date arithmetic and a modular plugin system for the Synaxarium, liturgical feasts, and canonical rites.
+
 <!-- Shields -->
 <div align="center">
 
@@ -24,12 +26,11 @@
 
 ## Features
 
-- **Accurate Calendar Conversions**: High-precision algorithms for converting between Coptic and Gregorian calendars.
-- **Ecclesiastical Computus**: Built-in support for the Paschal cycle, allowing calculation of moving feasts and fasts.
-- **Multi-language Support (i18n)**: Native support for English, Arabic, and Coptic (Bohairic) languages.
-- **Plugin System**: Extensible architecture with dedicated plugins for Synaxarium, Occasions, and Typicon data.
-- **TypeScript Native**: Written in TypeScript with full type definitions for a superior developer experience.
-- **Zero Dependencies**: Lightweight and fast footprint with no external dependencies.
+- **Universal Polymorphism**: Convert from native `Date`, ISO strings, timestamps, elements, or custom Temporal-like objects.
+- **Fluent Arithmetic**: Perform elegant date manipulations with `add`, `subtract`, and `with`.
+- **Localization**: Full translation support for English, Arabic, and Coptic (Bohairic).
+- **Extensible Architecture**: Modular plugin system allows lightweight core or full liturgical immersion.
+- **TypeScript Native**: Zero-dependency, ESM-first library with strict type safety.
 
 ## Installation
 
