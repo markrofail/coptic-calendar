@@ -18,9 +18,48 @@ describe('CopticDate', () => {
         expect(d2).not.toBe(d1); // Should be a copy
     });
 
-    it('should throw TypeError on invalid .from() input', () => {
-        expect(() => CopticDate.from('invalid')).toThrow(TypeError);
-        expect(() => CopticDate.from(null)).toThrow(TypeError);
+    it('should handle .from() with a native Date object', () => {
+        const date = new Date(2023, 8, 12);
+        const coptic = CopticDate.from(date);
+        expect(coptic.year).toBe(1740);
+        expect(coptic.month).toBe(1);
+        expect(coptic.day).toBe(1);
+    });
+
+    it('should handle .from() with a numeric timestamp', () => {
+        const timestamp = new Date(2023, 8, 12).getTime();
+        const coptic = CopticDate.from(timestamp);
+        expect(coptic.year).toBe(1740);
+    });
+
+    it('should handle .from() with an ISO string', () => {
+        const coptic = CopticDate.from('2023-09-12');
+        expect(coptic.year).toBe(1740);
+        expect(coptic.month).toBe(1);
+        expect(coptic.day).toBe(1);
+    });
+
+    it('should handle .from() with a Temporal-like object', () => {
+        const instant = { epochMilliseconds: new Date(2023, 8, 12).getTime() };
+        const coptic = CopticDate.from(instant);
+        expect(coptic.year).toBe(1740);
+    });
+
+    it('should handle .from() with a custom object having .toJSDate()', () => {
+        const custom = { toJSDate: () => new Date(2023, 8, 12) };
+        const coptic = CopticDate.from(custom);
+        expect(coptic.year).toBe(1740);
+        expect(coptic.month).toBe(1);
+        expect(coptic.day).toBe(1);
+    });
+
+    it('should throw TypeError on invalid .from() input with descriptive message', () => {
+        expect(() => CopticDate.from(undefined)).toThrow(/Cannot convert undefined to CopticDate/);
+        expect(() => CopticDate.from(null)).toThrow(/Cannot convert null to CopticDate/);
+        expect(() => CopticDate.from({})).toThrow(/Cannot convert \[object Object\] to CopticDate/);
+        expect(() => CopticDate.from('not-a-date')).toThrow(
+            /Cannot convert not-a-date to CopticDate/,
+        );
     });
 
     it('should identify leap years correctly (year % 4 === 3)', () => {

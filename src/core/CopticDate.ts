@@ -1,4 +1,4 @@
-import { copticToJDN, jdnToCopticElements } from './computus.js';
+import { copticToJDN, jdnToCopticElements, gregorianToJDN } from './computus.js';
 import { COPTIC_MONTHS, CALENDAR_UNITS } from './constants.js';
 import { translateMonth, type Locale } from './i18n.js';
 
@@ -56,23 +56,47 @@ export class CopticDate {
         plugin(CopticDate);
     }
 
-    static from(item: unknown): CopticDate {
-        if (item instanceof CopticDate) {
-            return new CopticDate(item.year, item.month, item.day);
+    static from(item: CopticDate
+        | Date
+        | string
+        | number
+        | { year: number; month: number; day: number }
+        | { epochMilliseconds: number }
+        | { toJSDate: () => Date };): CopticDate {
+        if (item === null || item === undefined) {
+            throw new TypeError("Cannot convert null or undefined to CopticDate");
         }
-        if (
-            typeof item === 'object' &&
-            item !== null &&
-            'year' in item &&
-            'month' in item &&
-            'day' in item
-        ) {
-            const obj = item as { year: number; month: number; day: number };
-            return new CopticDate(obj.year, obj.month, obj.day);
-        }
-        throw new TypeError('Invalid CopticDate item');
-    }
 
+        // 1. Handle native Coptic shapes (Instance or { year, month, day })
+        if (typeof item === 'object' && 'year' in item && 'month' in item && 'day' in item) {
+            return new CopticDate(Number(item.year), Number(item.month), Number(item.day));
+        }
+
+        // 2. Normalize all other supported inputs into a JS Date
+        let jsDate: Date;
+        if (item instanceof Date) {
+            jsDate = item;
+        } else if (typeof item === 'string' || typeof item === 'number') {
+            jsDate = new Date(item);
+        } else if (typeof item === 'object' && 'epochMilliseconds' in item) {
+            jsDate = new Date(Number(item.epochMilliseconds));
+        } else if (typeof item === 'object' && 'toJSDate' in item && typeof item.toJSDate === 'function') {
+            jsDate = item.toJSDate();
+        } else {
+            throw new TypeError(`Unrecognized date format: ${JSON.stringify(item)}`);
+        }
+
+        // 3. Validate the normalized Date
+        if (isNaN(jsDate.getTime())) {
+            throw new TypeError(`Invalid date value parsed from: ${JSON.stringify(item)}`);
+        }
+
+        // 4. Calculate and return
+        const jdn = gregorianToJDN(jsDate.getUTCFullYear(), jsDate.getUTCMonth() + 1, jsDate.getUTCDate());
+        const { year, month, day } = jdnToCopticElements(jdn);
+
+        return new CopticDate(year, month, day);
+    }
     static compare(one: CopticDate, two: CopticDate): -1 | 0 | 1 {
         if (one.year !== two.year) return one.year < two.year ? -1 : 1;
         if (one.month !== two.month) return one.month < two.month ? -1 : 1;
