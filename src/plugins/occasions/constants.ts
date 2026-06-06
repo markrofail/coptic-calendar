@@ -57,7 +57,6 @@ export const FIXED_OCCASIONS: Record<string, CopticOccasion[]> = {
     [`${COPTIC_MONTHS.TOBI}-6`]: ['Circumcision'],
     [`${COPTIC_MONTHS.TOBI}-11`]: ['Theophany'],
     [`${COPTIC_MONTHS.TOBI}-13`]: ['WeddingAtCana'],
-    [`${COPTIC_MONTHS.TOBI}-13`]: ['WeddingAtCana'],
     [`${COPTIC_MONTHS.MESHIR}-8`]: ['EntranceToTemple'],
     [`${COPTIC_MONTHS.PAREMHAT}-29`]: ['Annunciation'],
     [`${COPTIC_MONTHS.PASHONS}-24`]: ['FlightIntoEgypt'],

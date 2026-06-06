@@ -53,9 +53,9 @@ export function gregorianToJDN(year: number, month: number, day: number): number
 }
 
 export function jsDateToCopticDate(date: Date): CopticDate {
-    const gregYear = date.getFullYear();
-    const gregMonth = date.getMonth() + 1;
-    const gregDay = date.getDate();
+    const gregYear = date.getUTCFullYear();
+    const gregMonth = date.getUTCMonth() + 1;
+    const gregDay = date.getUTCDate();
     const jdn = gregorianToJDN(gregYear, gregMonth, gregDay);
     const elements = jdnToCopticElements(jdn);
     return CopticDate.from(elements);

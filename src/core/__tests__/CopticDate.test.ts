@@ -4,7 +4,7 @@ import { COPTIC_MONTHS } from '../constants.js';
 
 describe('CopticDate', () => {
     it('should convert 1 Thout 1740 (2023-09-12) correctly', () => {
-        const date = new Date(2023, 8, 12);
+        const date = new Date(Date.UTC(2023, 8, 12, 12, 0, 0));
         const coptic = jsDateToCopticDate(date);
         expect(coptic.year).toBe(1740);
         expect(coptic.month).toBe(1);

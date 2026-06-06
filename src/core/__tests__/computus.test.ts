@@ -22,9 +22,21 @@ describe('Computus Unit', () => {
     });
 
     it('should handle jsDateToCopticDate for early months', () => {
-        const date = new Date(2024, 0, 15); // Jan 15
+        // Noon UTC on Jan 15 2024 — safely Jan 15 in every timezone
+        const date = new Date(Date.UTC(2024, 0, 15, 12, 0, 0));
         const coptic = jsDateToCopticDate(date);
         expect(coptic.year).toBe(1740);
         expect(coptic.month).toBe(5); // Tobi
+        expect(coptic.day).toBe(6);   // Jan 15 2024 = Tobi 6, 1740
+    });
+
+    it('should use UTC date, not local date, for conversion', () => {
+        // Midnight UTC on Jan 16 2024 = Jan 15 in UTC-1 through UTC-12 timezones
+        // Must return Jan 16 UTC (Tobi 7, 1740), not Jan 15
+        const date = new Date(Date.UTC(2024, 0, 16, 0, 0, 0));
+        const coptic = jsDateToCopticDate(date);
+        expect(coptic.year).toBe(1740);
+        expect(coptic.month).toBe(5); // Tobi
+        expect(coptic.day).toBe(7);   // Jan 16 2024 UTC = Tobi 7, 1740
     });
 });
