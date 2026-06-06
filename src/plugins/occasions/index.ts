@@ -38,11 +38,18 @@ export function getOccasionForCopticYear(occasion: CopticOccasion, year: number)
     }
 
     // Check Easter-relative ones
-    for (const [key, offset] of Object.entries(EASTER_OFFSETS)) {
-        if (key.toLowerCase() === occasion.toLowerCase()) {
-            return easter.add({ days: offset });
-        }
-    }
+    const easterRelative: Partial<Record<CopticOccasion, number>> = {
+        JonahsPassover:   EASTER_OFFSETS.JONAHS_PASSOVER,
+        Lent:             EASTER_OFFSETS.LENT,
+        PalmSunday:       EASTER_OFFSETS.PALM_SUNDAY,
+        CovenantThursday: EASTER_OFFSETS.COVENANT_THURSDAY,
+        ThomasSunday:     EASTER_OFFSETS.THOMAS_SUNDAY,
+        Ascension:        EASTER_OFFSETS.ASCENSION,
+        Pentecost:        EASTER_OFFSETS.PENTECOST,
+        ApostlesFast:     EASTER_OFFSETS.APOSTLES_FAST,
+    };
+    const offset = easterRelative[occasion];
+    if (offset !== undefined) return easter.add({ days: offset });
 
     // Special cases
     if (occasion === 'Easter') return easter;

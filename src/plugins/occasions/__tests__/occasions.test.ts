@@ -119,6 +119,26 @@ describe('Occasions Plugin', () => {
             expect(nextEaster.month).toBe(8);
             expect(nextEaster.day).toBe(12);
         });
+
+        it('should resolve all Easter-relative occasions via .when()', () => {
+            const d = CopticDate.from({ year: 1740, month: 1, day: 1 });
+            const easter = getEasterForCopticYear(1740); // Parmouti 27, 1740
+
+            const expectSameDate = (actual: CopticDate, expected: CopticDate): void => {
+                expect(actual.year).toBe(expected.year);
+                expect(actual.month).toBe(expected.month);
+                expect(actual.day).toBe(expected.day);
+            };
+
+            expectSameDate(d.when('JonahsPassover'), easter.subtract({ days: 66 }));
+            expectSameDate(d.when('Lent'),           easter.subtract({ days: 55 }));
+            expectSameDate(d.when('PalmSunday'),     easter.subtract({ days: 7 }));
+            expectSameDate(d.when('CovenantThursday'), easter.subtract({ days: 3 }));
+            expectSameDate(d.when('ThomasSunday'),   easter.add({ days: 7 }));
+            expectSameDate(d.when('Ascension'),      easter.add({ days: 39 }));
+            expectSameDate(d.when('Pentecost'),      easter.add({ days: 49 }));
+            expectSameDate(d.when('ApostlesFast'),   easter.add({ days: 50 }));
+        });
     });
 
     it('should provide comprehensive coverage for sliding Paramoun windows', () => {
